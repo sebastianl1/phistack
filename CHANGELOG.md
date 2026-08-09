@@ -2,6 +2,18 @@
 
 Todas las notas de versiones de PhiStack. Sigue [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [2.0.2] - 2026-08-09
+
+### Removed
+- **Banner de terminal eliminado**: `phi` ya no muestra el fractal al arrancar ni en el menú interactivo; se eliminó el flag `--banner`, `render_banner`/`set_banner` y los tamaños de banner. `phistack/fractal.py` se conserva solo para generar la imagen de la landing.
+
+### Changed
+- **Web**: `og-image.png` regenerada en **rojo intenso** (antes azul/cian); la paleta de la página se intensificó a carmesí (`#e11d48`) con gradiente rojo→naranja.
+- **`phi list`**: imprime **solo los nombres** de las herramientas (uno por línea; `--group` añade encabezados de categoría).
+- **Menú interactivo "🛠️ Herramientas"**: elige categoría → **lista de nombres** (búsqueda difusa) → al entrar se muestra la **descripción** con opciones **Instalar / Eliminar / Volver**.
+- **Web (móvil)**: en pantallas <640px la tabla del catálogo oculta las columnas Categoría e ID y se compacta.
+- i18n actualizado (`feat6_d`, `uso.c6`).
+
 ## [2.0.1] - 2026-08-09
 
 ### Security

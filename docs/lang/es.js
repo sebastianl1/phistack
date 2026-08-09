@@ -40,7 +40,7 @@ window.I18N = {
   "feat5_t": "phi doctor",
   "feat5_d": "Diagnostica Python, pip, git, pkg y dependencias antes de instalar.",
   "feat6_t": "Tema Termux",
-  "feat6_d": "Banner fractal de Mandelbrot, prompt de fish y paleta de colores propia.",
+  "feat6_d": "Prompt de fish y paleta de colores propia.",
   "install.eyebrow": "Instalación",
   "install.title": "Listo en menos de 2 minutos",
   "install.sub": "Elige tu nivel y copia el bloque de comandos.",

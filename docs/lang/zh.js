@@ -40,7 +40,7 @@ window.I18N = {
   "feat5_t": "phi doctor",
   "feat5_d": "在安装前诊断 Python、pip、git、pkg 和依赖项。",
   "feat6_t": "Termux 主题",
-  "feat6_d": "曼德博分形横幅、fish 提示符和自定义调色板。",
+  "feat6_d": "fish 提示符和自定义调色板。",
   "install.eyebrow": "安装",
   "install.title": "不到 2 分钟即可就绪",
   "install.sub": "选择你的级别并复制命令块。",

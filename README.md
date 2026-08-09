@@ -13,7 +13,6 @@
 - **Modo interactivo y CLI**: `phi` abre el menú; `phi install <tool>` por línea de comandos.
 - **Laboratorio de terminal** (`phi term`): presets de banner aleatorio de login, prompt de fish, colores y fuente. Elige, personaliza o guarda tu propia config.
 - **Laboratorio de IDE** (`phi ide`): presets de nvim (AstroVim + variantes). Instala, edita y respalda.
-- **Banner fractal**: conjunto de Mandelbrot completo en silueta 2 tonos (ANSI half-blocks, 3 tamaños).
 - **Bilingüe ES/EN** con persistencia (`phi lang`).
 - **`phi doctor`**: comprueba Python, pip, git, pkg y dependencias.
 - **Landing page** (GitHub Pages): <https://sebastianl1.github.io/phistack/> con todas las herramientas listadas y descripciones (SEO).
@@ -54,6 +53,10 @@ phi doctor
 phi update
 phi uninstall
 ```
+
+En el menú interactivo, "🛠️ Herramientas" muestra **solo los nombres**; al entrar
+en una herramienta se muestra su **descripción** con opciones para **instalar,
+eliminar o volver** al menú anterior.
 
 ## Catálogo / Catalog
 

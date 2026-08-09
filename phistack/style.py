@@ -1,28 +1,8 @@
 import json
 import shutil
 
-from . import paths, fractal
+from . import paths
 from .lang import t
-
-BANNER_SIZES = ("small", "medium", "large")
-_banner_cache = {}
-
-
-def render_banner(size="small"):
-    if size not in BANNER_SIZES:
-        size = "small"
-    if size not in _banner_cache:
-        _banner_cache[size] = fractal.build(size)
-    return _banner_cache[size]
-
-
-def set_banner(size):
-    if size not in BANNER_SIZES:
-        return False
-    config = _load_config()
-    config["banner"] = size
-    _save_config(config)
-    return True
 
 
 def set_prompt(style):

@@ -1,12 +1,10 @@
 import argparse
-import json
 import shutil
 import subprocess
 import sys
 import types
 
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
 
 from . import catalog, doctor, installer, menus, paths, presets, state, style
@@ -23,80 +21,25 @@ STATUS_ICON = {
 }
 
 
-def _config():
-    cfg = {}
-    if paths.CONFIG_FILE.exists():
-        try:
-            with open(paths.CONFIG_FILE, encoding="utf-8") as f:
-                cfg = json.load(f)
-        except (OSError, json.JSONDecodeError):
-            cfg = {}
-    return cfg
-
-
-def _print_banner():
-    config = _config()
-    size = config.get("banner", "small")
-    sys.stdout.write(style.render_banner(size) + "\n")
-    sys.stdout.flush()
-
-
 def _installed_mark(tool):
     if state.is_installed(tool["id"]) or installer.installed_by_verify(tool):
         return " [green]✓[/]"
     return ""
 
 
-def _print_tool_table(tools, group=False, show_desc=False):
+def _print_names(tools, group=False):
     if group:
         for cat in catalog.category_ids():
             rows = [x for x in tools if x.get("category") == cat]
             if not rows:
                 continue
-            table = Table(title=f"[bold]{category_name(cat)}[/]", box=None, pad_edge=False)
-            table.add_column(t("status"), no_wrap=True)
-            table.add_column(t("tool_id"))
-            table.add_column(t("tool_name"))
-            table.add_column(t("source"), no_wrap=True)
+            console.print(f"[bold cyan]{category_name(cat)}[/]")
             for tool in rows:
-                table.add_row(
-                    f"{STATUS_ICON.get(tool.get('status'), '●')} {status_name(tool.get('status'))}",
-                    tool["id"],
-                    tool.get("name", tool["id"]) + _installed_mark(tool),
-                    tool.get("source", ""),
-                )
-            console.print(table)
+                console.print(f"  {tool.get('name', tool['id'])}")
             console.print()
         return
-    lang = load_lang()
-    table = Table(box=None, pad_edge=False, show_header=True, header_style="bold")
-    table.add_column(t("tool_id"), no_wrap=True, style="bold")
-    table.add_column(t("tool_name"))
-    table.add_column(t("category"), no_wrap=True)
-    table.add_column(t("status"), no_wrap=True)
-    table.add_column(t("source"), no_wrap=True)
-    if show_desc:
-        table.add_column(t("description"))
-    cat_order = catalog.category_ids()
-    ordered = sorted(
-        tools,
-        key=lambda x: (
-            cat_order.index(x.get("category")) if x.get("category") in cat_order else 99,
-            x.get("name", x["id"]),
-        ),
-    )
-    for tool in ordered:
-        row = [
-            tool["id"],
-            tool.get("name", tool["id"]) + _installed_mark(tool),
-            category_name(tool.get("category")),
-            f"{STATUS_ICON.get(tool.get('status'), '●')} {status_name(tool.get('status'))}",
-            tool.get("source", ""),
-        ]
-        if show_desc:
-            row.append(tool.get("desc_" + lang, tool.get("desc_en", "")))
-        table.add_row(*row)
-    console.print(table)
+    for tool in tools:
+        console.print(tool.get("name", tool["id"]))
 
 
 def cmd_list(args):
@@ -112,10 +55,8 @@ def cmd_list(args):
         for tool in tools:
             cmd_info(types.SimpleNamespace(tool=tool["id"]))
         return
-    show_desc = bool(args.category and args.category != "*")
-    _print_tool_table(tools, group=args.group, show_desc=show_desc)
-    cats = len({x.get("category") for x in tools})
-    console.print(f"[dim]{t('list.tools_count', n=len(tools), c=cats)}[/]")
+    _print_names(tools, group=args.group)
+    console.print(f"[dim]{t('list.tools_count', n=len(tools), c=len({x.get('category') for x in tools}))}[/]")
 
 
 def cmd_search(args):
@@ -123,15 +64,11 @@ def cmd_search(args):
     if not results:
         console.print(f"[yellow]{t('no_results', q=args.query)}[/]")
         return
-    _print_tool_table(results, group=False)
+    _print_names(results)
     console.print(f"[dim]{t('list.tools_count', n=len(results), c=len({x.get('category') for x in results}))}[/]")
 
 
-def cmd_info(args):
-    tool = catalog.get_tool(args.tool)
-    if not tool:
-        console.print(f"[red]{t('unknown_tool', tool=args.tool)}[/]")
-        sys.exit(1)
+def _tool_panel(tool):
     lang = load_lang()
     lines = [
         f"[bold]{tool.get('name', tool['id'])}[/] [grey]({tool['id']})[/]",
@@ -148,8 +85,32 @@ def cmd_info(args):
         lines.append(f"[bold]{t('repository')}:[/] {tool['repo']}")
     if tool.get("run"):
         lines.append(f"[bold]{t('run_cmd')}:[/] phi run {tool['id']}")
-    console.print(Panel("\n".join(lines), border_style="cyan"))
+    console.print(Panel("\n".join(lines), border_style="red"))
     console.print(f"[yellow]{t('warn_authorized')}[/]")
+
+
+def _tool_action(tool):
+    _tool_panel(tool)
+    action = menus.select(
+        t("select_tool"),
+        [
+            menus.Choice(value="install", name=f"⬇️  {t('install_cmd')}"),
+            menus.Choice(value="remove", name=f"🗑️  {t('remove_cmd')}"),
+            menus.Choice(value="back", name=t("back")),
+        ],
+    )
+    if action == "install":
+        cmd_install(types.SimpleNamespace(tools=[tool["id"]], interactive=False))
+    elif action == "remove":
+        cmd_remove(types.SimpleNamespace(tools=[tool["id"]], interactive=False, yes=False))
+
+
+def cmd_info(args):
+    tool = catalog.get_tool(args.tool)
+    if not tool:
+        console.print(f"[red]{t('unknown_tool', tool=args.tool)}[/]")
+        sys.exit(1)
+    _tool_panel(tool)
 
 
 def cmd_install(args):
@@ -242,25 +203,15 @@ def cmd_lang(args):
 
 
 def cmd_theme(args):
-    choice = menus.select(
-        t("theme_menu"),
-        [
-            menus.Choice(value="banner", name=t("banner_option")),
-            menus.Choice(value="prompt", name=t("prompt_option")),
-        ],
+    styles = presets.prompt_styles()
+    picked = menus.select(
+        t("term.choose_prompt"),
+        [menus.Choice(value=s, name=s) for s in styles],
     )
-    if choice == "banner":
-        size = menus.select(
-            t("banner_size"),
-            [menus.Choice(value=s, name=s) for s in style.BANNER_SIZES],
-        )
-        style.set_banner(size)
-        console.print(f"[green]{t('banner_set', size=size)}[/]")
-    else:
-        styles = presets.prompt_styles()
-        picked = menus.select(t("term.choose_prompt"), [menus.Choice(value=s, name=s) for s in styles])
-        presets.set_prompt(picked)
+    if presets.set_prompt(picked):
         console.print(f"[green]{t('term.prompt_ok', style=picked)}[/]")
+    else:
+        console.print(f"[red]{t('invalid_option')}[/]")
 
 
 def cmd_doctor(args):
@@ -463,17 +414,14 @@ def cmd_ide_backup(args):
 
 def interactive():
     while True:
-        _print_banner()
         lang = load_lang()
         choice = menus.select(
             t("main_menu"),
             [
                 menus.Choice(value="lab", name=f"🧪 {t('menu.lab')}"),
-                menus.Choice(value="install", name=f"🛠️  {t('install_tool')}"),
-                menus.Choice(value="remove", name=f"🗑️  {t('remove_tool')}"),
+                menus.Choice(value="tools", name=f"🛠️  {t('menu.tools')}"),
                 menus.Choice(value="list", name=f"📋 {t('list_tools')}"),
                 menus.Choice(value="search", name=f"🔍 {t('search_tools')}"),
-                menus.Choice(value="info", name=f"ℹ️  {t('tool_info')}"),
                 menus.Choice(value="doctor", name=f"🩺 {t('doctor')}"),
                 menus.Choice(value="lang", name=f"🌐 {t('language')} ({lang})"),
                 menus.Choice(value="update", name=f"🔄 {t('update_phistack')}"),
@@ -483,30 +431,13 @@ def interactive():
 
         if choice == "lab":
             _interactive_lab()
-        elif choice == "install":
-            cat = menus.select(
-                t("select_category"),
-                [menus.Choice(value="*", name=t("all_categories"))]
-                + [menus.Choice(value=c, name=category_name(c)) for c in catalog.category_ids()],
-            )
-            tools = catalog.list_tools(category=cat if cat != "*" else None)
-            picked = _pick_tool(tools)
-            if picked:
-                cmd_install(types.SimpleNamespace(tools=[picked["id"]], interactive=False))
-        elif choice == "remove":
-            tools = [x for x in catalog.list_tools() if state.is_installed(x["id"]) or installer.installed_by_verify(x)]
-            picked = _pick_tool(tools)
-            if picked:
-                cmd_remove(types.SimpleNamespace(tools=[picked["id"]], interactive=False, yes=False))
+        elif choice == "tools":
+            _interactive_tools()
         elif choice == "list":
             cmd_list(types.SimpleNamespace(category="*", status=None, installed=False, source=None, detail=False, group=False))
         elif choice == "search":
             query = menus.text(t("search_query"))
             cmd_search(types.SimpleNamespace(query=query))
-        elif choice == "info":
-            picked = _pick_tool(catalog.list_tools())
-            if picked:
-                cmd_info(types.SimpleNamespace(tool=picked["id"]))
         elif choice == "doctor":
             cmd_doctor(None)
         elif choice == "lang":
@@ -515,6 +446,39 @@ def interactive():
             cmd_update(None)
         else:
             break
+
+
+def _interactive_tools():
+    while True:
+        choice = menus.select(
+            t("menu.tools"),
+            [
+                menus.Choice(value="explore", name=f"🔍 {t('install_tool')}"),
+                menus.Choice(value="remove", name=f"🗑️  {t('remove_tool')}"),
+                menus.Choice(value="back", name=t("back")),
+            ],
+        )
+        if choice == "explore":
+            cat = menus.select(
+                t("select_category"),
+                [menus.Choice(value="*", name=t("all_categories"))]
+                + [menus.Choice(value=c, name=category_name(c)) for c in catalog.category_ids()],
+            )
+            tools = catalog.list_tools(category=cat if cat != "*" else None)
+            picked = _pick_tool(tools)
+            if picked:
+                _tool_action(picked)
+        elif choice == "remove":
+            tools = [
+                x
+                for x in catalog.list_tools()
+                if state.is_installed(x["id"]) or installer.installed_by_verify(x)
+            ]
+            picked = _pick_tool(tools)
+            if picked:
+                cmd_remove(types.SimpleNamespace(tools=[picked["id"]], interactive=False, yes=False))
+        else:
+            return
 
 
 def _interactive_lab():
@@ -586,7 +550,6 @@ def _interactive_ide():
 
 def main():
     parser = argparse.ArgumentParser(prog="phi", description="PhiStack - Laboratorio Termux")
-    parser.add_argument("--banner", action="store_true", help="Mostrar banner / Show banner")
     sub = parser.add_subparsers(dest="command")
 
     p_list = sub.add_parser("list", help="Listar herramientas / List tools")
@@ -681,10 +644,8 @@ def main():
         console.print(f"[yellow]Instalando dependencias: {', '.join(missing)}[/]")
         installer.ensure_dependencies()
 
-    if args.banner or args.command is None:
-        _print_banner()
-        if args.command is None:
-            interactive()
+    if args.command is None:
+        interactive()
         return
 
     args.func(args)
