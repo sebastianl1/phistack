@@ -6,7 +6,7 @@ window.I18N = {
   "nav.catalog": "Catalog",
   "nav.faq": "FAQ",
   "nav.github": "GitHub",
-  "hero.badge_tools": "72 tools",
+  "hero.badge_tools": "41 tools",
   "hero.badge_lang": "ES/EN",
   "hero.title_span": "for Termux",
   "hero.tagline": "Manage 72 cybersecurity tools with interactive menus, a declarative catalog and obsolescence analysis. Bilingual ES/EN and ready for your own stack.",
@@ -21,7 +21,7 @@ window.I18N = {
   "funcion.title": "From terminal to your arsenal in 3 steps",
   "funcion.sub": "PhiStack combines a declarative catalog, an installation engine with verification and modern interactive menus.",
   "funcion.step1_t": "Declarative catalog",
-  "funcion.step1_d": "<code>catalog/tools.json</code> describes 72 tools with status, description, install and verify steps. No <code>if/elif</code> chains.",
+  "funcion.step1_d": "<code>catalog/tools.json</code> describes 41 tools with status, description, install and verify steps. No <code>if/elif</code> chains.",
   "funcion.step2_t": "Engine with verification",
   "funcion.step2_d": "Installs via <code>pkg</code>, <code>git</code>, <code>pip</code> or SHA256 downloads, and verifies every tool actually works.",
   "funcion.step3_t": "Interactive menus",
@@ -107,5 +107,13 @@ window.I18N = {
   "copied": "Copied!",
   "meta.title": "PhiStack for Termux — Your security arsenal with interactive menus",
   "meta.description": "Manage 72 cybersecurity tools in Termux with a declarative catalog, interactive menus (InquirerPy) and obsolescence analysis. Bilingual ES/EN.",
-  "meta.keywords": "phistack termux, termux stack manager, android security tools, termux hacking tools, osintphi, torphi, lamdaphi, inquirerpy termux, termux arsenal, mandelbrot banner"
+  "meta.keywords": "phistack termux, termux stack manager, android security tools, termux hacking tools, osintphi, torphi, lamdaphi, inquirerpy termux, termux arsenal, mandelbrot banner",
+  "lab.eyebrow": "Laboratory",
+  "lab.title": "Structure your Termux, not just install tools",
+  "lab.sub": "Captured terminal and IDE presets, ready to choose, customize and save.",
+  "lab.term_t": "Terminal presets",
+  "lab.term_d": "Random login banner, fish prompt, colors and font. Choose or save your own config with <code>phi term</code>.",
+  "lab.ide_t": "IDE presets",
+  "lab.ide_d": "nvim with AstroVim and variants. Install, edit and back up with <code>phi ide</code>.",
+  "uso.c7": "# Terminal / IDE (lab)"
 };

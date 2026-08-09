@@ -6,7 +6,7 @@ window.I18N = {
   "nav.catalog": "Katalog",
   "nav.faq": "FAQ",
   "nav.github": "GitHub",
-  "hero.badge_tools": "72 Werkzeuge",
+  "hero.badge_tools": "41 Werkzeuge",
   "hero.badge_lang": "ES/DE",
   "hero.title_span": "für Termux",
   "hero.tagline": "Verwalte 72 Cybersicherheits-Tools mit interaktiven Menüs, einem deklarativen Katalog und Obsoleszenz-Analyse. Zweisprachig ES/DE und bereit für deinen eigenen Stack.",
@@ -107,5 +107,13 @@ window.I18N = {
   "copied": "Kopiert!",
   "meta.title": "PhiStack für Termux — Dein Sicherheits-Arsenal mit interaktiven Menüs",
   "meta.description": "Verwalte 72 Cybersicherheits-Tools in Termux mit deklarativem Katalog, interaktiven Menüs (InquirerPy) und Obsoleszenz-Analyse. Zweisprachig ES/DE.",
-  "meta.keywords": "phistack termux, termux stack manager, android security tools, osintphi, torphi, lamdaphi, arsenal termux"
+  "meta.keywords": "phistack termux, termux stack manager, android security tools, osintphi, torphi, lamdaphi, arsenal termux",
+  "lab.eyebrow": "Labor",
+  "lab.title": "Strukturier dein Termux, installiere nicht nur Tools",
+  "lab.sub": "Erfasste Terminal- und IDE-Presets, bereit zum Auswählen, Anpassen und Speichern.",
+  "lab.term_t": "Terminal-Presets",
+  "lab.term_d": "Zufälliges Banner, fish-Prompt, Farben und Schrift. Wähle oder speichere deine Config mit <code>phi term</code>.",
+  "lab.ide_t": "IDE-Presets",
+  "lab.ide_d": "nvim mit AstroVim und Varianten. Installiere, bearbeite und sichere mit <code>phi ide</code>.",
+  "uso.c7": "# Terminal / IDE (Lab)"
 };

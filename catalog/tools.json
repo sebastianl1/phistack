@@ -1,9 +1,9 @@
 {
   "meta": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "generator": "PhiStack",
-    "source": "análisis de mantenimiento de herramientas de seguridad",
-    "note": "status: active = mantenida y recomendada | legacy = funcional pero sin mantenimiento | obsolete = archivada/rota, usar reemplazo | api = requiere API externa | local = regional/personal"
+    "source": "catálogo curado y funcional",
+    "note": "source: vendor = código dentro de lab/tools | pkg = repositorios de Termux | pip = PyPI | download = binario de release. status: active = mantenida | api = requiere API key | sistema = se instala vía gestor de paquetes"
   },
   "categories": {
     "osint": {},
@@ -22,29 +22,33 @@
       "name": "Sherlock",
       "category": "osint",
       "status": "active",
-      "desc_es": "Encuentra cuentas de redes sociales por nombre de usuario.",
-      "desc_en": "Find social media accounts by username.",
-      "note_es": "Muy activa, ideal para OSINT de personas.",
-      "note_en": "Very active, great for people OSINT.",
+      "source": "vendor",
+      "desc_es": "Encuentra cuentas de redes sociales por nombre de usuario en cientos de plataformas.",
+      "desc_en": "Find social media accounts by username across hundreds of platforms.",
+      "note_es": "Código vendorizado; se instala desde lab/tools/sherlock.",
+      "note_en": "Vendored source; installed from lab/tools/sherlock.",
       "repo": "https://github.com/sherlock-project/sherlock",
       "install": [
-        {"method": "pip", "packages": ["sherlock-project"]}
+        {"method": "vendor", "name": "sherlock"},
+        {"method": "run", "cmd": "pip install -r $OPT/sherlock/requirements.txt"},
+        {"method": "launcher", "name": "sherlock", "script": "#!/bin/bash\ncd $OPT/sherlock\nexec python3 -m sherlock_project \"$@\"\n"}
       ],
       "remove": [
-        {"method": "run", "cmd": "pip uninstall -y sherlock-project"}
+        {"method": "run", "cmd": "rm -rf $OPT/sherlock"},
+        {"method": "run", "cmd": "rm -f $BIN/sherlock"}
       ],
-      "verify": {"cmd": "sherlock --version"}
+      "verify": {"exists": "$OPT/sherlock/sherlock_project/__main__.py"}
     },
     {
       "id": "theharvester",
       "name": "theHarvester",
       "category": "osint",
       "status": "active",
-      "desc_es": "Recolección de emails, subdominios, hosts y nombres en buscadores y fuentes públicas.",
-      "desc_en": "Email, subdomain, host and name harvesting from search engines and public sources.",
-      "note_es": "Reemplazo moderno de Infoga. Paquete oficial de Termux.",
-      "note_en": "Modern replacement for Infoga. Official Termux package.",
-      "replacement": ["infoga"],
+      "source": "pkg",
+      "desc_es": "Recolección de emails, subdominios y hosts en buscadores y fuentes públicas.",
+      "desc_en": "Email, subdomain and host harvesting from search engines and public sources.",
+      "note_es": "Se instala desde los repositorios de Termux.",
+      "note_en": "Installed from Termux repositories.",
       "repo": "https://github.com/laramies/theHarvester",
       "install": [
         {"method": "pkg", "packages": ["theharvester"]}
@@ -59,148 +63,139 @@
       "name": "Holehe",
       "category": "osint",
       "status": "active",
+      "source": "vendor",
       "desc_es": "Comprueba si un email está registrado en ~120 servicios web.",
       "desc_en": "Check if an email is registered on ~120 websites.",
-      "note_es": "Activa y ligera. Requiere red.",
-      "note_en": "Active and lightweight. Requires network.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/megadose/holehe",
       "install": [
-        {"method": "pip", "packages": ["holehe"]}
+        {"method": "vendor", "name": "holehe"},
+        {"method": "pip", "packages": ["requests", "colorama"]},
+        {"method": "launcher", "name": "holehe", "script": "#!/bin/bash\ncd $OPT/holehe\nexec python3 -c \"from holehe.core import main; main()\" \"$@\"\n"}
       ],
       "remove": [
-        {"method": "run", "cmd": "pip uninstall -y holehe"}
+        {"method": "run", "cmd": "rm -rf $OPT/holehe"},
+        {"method": "run", "cmd": "rm -f $BIN/holehe"}
       ],
-      "verify": {"cmd": "holehe --help"}
+      "verify": {"exists": "$OPT/holehe/holehe/core.py"}
     },
     {
       "id": "h8mail",
       "name": "h8mail",
       "category": "osint",
       "status": "active",
-      "desc_es": "Búsqueda de brechas y recolección de emails (HIBP, hunting, etc.).",
-      "desc_en": "Email breach hunting and OSINT (HIBP, hunting, etc.).",
-      "note_es": "Activa; el sucesor h8mail2 está más mantenido.",
-      "note_en": "Active; the successor h8mail2 is better maintained.",
-      "replacement": ["h8mail2"],
+      "source": "vendor",
+      "desc_es": "Búsqueda de brechas y recolección de emails (HIBP y otras fuentes).",
+      "desc_en": "Email breach hunting and OSINT (HIBP and other sources).",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/khast3x/h8mail",
       "install": [
-        {"method": "pip", "packages": ["h8mail"]}
+        {"method": "vendor", "name": "h8mail"},
+        {"method": "pip", "packages": ["requests", "beautifulsoup4", "click", "colorama", "termcolor"]},
+        {"method": "launcher", "name": "h8mail", "script": "#!/bin/bash\ncd $OPT/h8mail\nexec python3 -m h8mail \"$@\"\n"}
       ],
       "remove": [
-        {"method": "run", "cmd": "pip uninstall -y h8mail"}
+        {"method": "run", "cmd": "rm -rf $OPT/h8mail"},
+        {"method": "run", "cmd": "rm -f $BIN/h8mail"}
       ],
-      "verify": {"cmd": "h8mail --help"}
-    },
-    {
-      "id": "h8mail2",
-      "name": "h8mail2",
-      "category": "osint",
-      "status": "active",
-      "desc_es": "Sucesor de h8mail: búsqueda de brechas de email más actualizada.",
-      "desc_en": "h8mail successor: more up-to-date email breach hunting.",
-      "repo": "https://github.com/khast3x/h8mail2",
-      "install": [
-        {"method": "pip", "packages": ["h8mail2"]}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "pip uninstall -y h8mail2"}
-      ],
-      "verify": {"cmd": "h8mail2 --help"}
-    },
-    {
-      "id": "infoga",
-      "name": "Infoga",
-      "category": "osint",
-      "status": "obsolete",
-      "desc_es": "Recolección de emails por dominio.",
-      "desc_en": "Email collection by domain.",
-      "note_es": "Archivada desde 2021. Usa theHarvester.",
-      "note_en": "Archived since 2021. Use theHarvester.",
-      "replacement": ["theharvester"],
-      "repo": "https://github.com/m4ll0k/Infoga",
-      "install": [
-        {"method": "git", "url": "https://github.com/m4ll0k/Infoga", "name": "infoga"},
-        {"method": "pip", "packages": ["requests", "beautifulsoup4"]},
-        {"method": "launcher", "name": "infoga", "script": "#!/bin/bash\ncd $OPT/infoga\nexec python3 infoga.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/infoga"},
-        {"method": "run", "cmd": "rm -f $BIN/infoga"}
-      ],
-      "verify": {"bin": "infoga"}
+      "verify": {"exists": "$OPT/h8mail/h8mail/__main__.py"}
     },
     {
       "id": "nexfil",
       "name": "Nexfil",
       "category": "osint",
       "status": "active",
+      "source": "vendor",
       "desc_es": "OSINT de usernames: busca el nombre de usuario en ~350 webs.",
       "desc_en": "Username OSINT across ~350 websites.",
-      "note_es": "Activa (thewhiteh4t).",
-      "note_en": "Active (thewhiteh4t).",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/thewhiteh4t/nexfil",
       "install": [
-        {"method": "git", "url": "https://github.com/thewhiteh4t/nexfil", "name": "nexfil"},
+        {"method": "vendor", "name": "nexfil"},
         {"method": "pip", "packages": ["requests", "colorama"]},
-        {"method": "launcher", "name": "nexfil", "script": "#!/bin/bash\ncd $OPT/nexfil\nexec python3 nexfil.py \"$@\"\n"}
+        {"method": "launcher", "name": "nexfil", "script": "#!/bin/bash\ncd $OPT/nexfil/src\nexec python3 -c \"from nexfil.cli import cli; cli()\" \"$@\"\n"}
       ],
       "remove": [
         {"method": "run", "cmd": "rm -rf $OPT/nexfil"},
         {"method": "run", "cmd": "rm -f $BIN/nexfil"}
       ],
-      "verify": {"bin": "nexfil"}
+      "verify": {"exists": "$OPT/nexfil/src/nexfil/cli.py"}
+    },
+    {
+      "id": "protosint",
+      "name": "ProtoSINT",
+      "category": "osint",
+      "status": "active",
+      "source": "vendor",
+      "desc_es": "OSINT orientado a organizaciones y empresas.",
+      "desc_en": "Organization-focused OSINT.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
+      "repo": "https://github.com/pixelbubble/ProtOSINT",
+      "install": [
+        {"method": "vendor", "name": "protosint"},
+        {"method": "launcher", "name": "protosint", "script": "#!/bin/bash\ncd $OPT/protosint\nexec python3 protosint.py \"$@\"\n"}
+      ],
+      "remove": [
+        {"method": "run", "cmd": "rm -rf $OPT/protosint"},
+        {"method": "run", "cmd": "rm -f $BIN/protosint"}
+      ],
+      "verify": {"exists": "$OPT/protosint/protosint.py"}
+    },
+    {
+      "id": "pwnedornot",
+      "name": "PwnedOrNot",
+      "category": "osint",
+      "status": "active",
+      "source": "vendor",
+      "desc_es": "Comprueba emails filtrados en brechas vía HIBP.",
+      "desc_en": "Check emails exposed in breaches via HIBP.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
+      "repo": "https://github.com/thewhiteh4t/pwnedOrNot",
+      "install": [
+        {"method": "vendor", "name": "pwnedornot"},
+        {"method": "pip", "packages": ["requests", "colorama"]},
+        {"method": "launcher", "name": "pwnedornot", "script": "#!/bin/bash\ncd $OPT/pwnedornot\nexec python3 pwnedornot.py \"$@\"\n"}
+      ],
+      "remove": [
+        {"method": "run", "cmd": "rm -rf $OPT/pwnedornot"},
+        {"method": "run", "cmd": "rm -f $BIN/pwnedornot"}
+      ],
+      "verify": {"exists": "$OPT/pwnedornot/pwnedornot.py"}
     },
     {
       "id": "octosuite",
       "name": "Octosuite",
       "category": "osint",
       "status": "active",
+      "source": "pip",
       "desc_es": "OSINT avanzado sobre repositorios y usuarios de GitHub.",
       "desc_en": "Advanced OSINT on GitHub repositories and users.",
-      "note_es": "Activa (Bellingcat).",
-      "note_en": "Active (Bellingcat).",
+      "note_es": "Se instala desde PyPI.",
+      "note_en": "Installed from PyPI.",
       "repo": "https://github.com/bellingcat/octosuite",
       "install": [
-        {"method": "git", "url": "https://github.com/bellingcat/octosuite", "name": "octosuite"},
-        {"method": "pip", "packages": ["requests", "rich", "beautifulsoup4"]},
-        {"method": "launcher", "name": "octosuite", "script": "#!/bin/bash\ncd $OPT/octosuite\nexec python3 octosuite.py \"$@\"\n"}
+        {"method": "pip", "packages": ["octosuite"]}
       ],
       "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/octosuite"},
-        {"method": "run", "cmd": "rm -f $BIN/octosuite"}
+        {"method": "run", "cmd": "pip uninstall -y octosuite"}
       ],
-      "verify": {"bin": "octosuite"}
-    },
-    {
-      "id": "mosint",
-      "name": "Mosint",
-      "category": "osint",
-      "status": "active",
-      "desc_es": "Herramienta de OSINT automatizada para emails.",
-      "desc_en": "Automated email OSINT tool.",
-      "note_es": "Activa.",
-      "note_en": "Active.",
-      "repo": "https://github.com/alpkeskin/mosint",
-      "install": [
-        {"method": "git", "url": "https://github.com/alpkeskin/mosint", "name": "mosint"},
-        {"method": "pip", "packages": ["requests"]},
-        {"method": "launcher", "name": "mosint", "script": "#!/bin/bash\ncd $OPT/mosint\nexec python3 mosint.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/mosint"},
-        {"method": "run", "cmd": "rm -f $BIN/mosint"}
-      ],
-      "verify": {"bin": "mosint"}
+      "verify": {"cmd": "octosuite --help"}
     },
     {
       "id": "phoneinfoga",
       "name": "PhoneInfoga",
       "category": "osint",
       "status": "active",
-      "desc_es": "OSINT de números de teléfono: formato, país, operador, búsquedas.",
-      "desc_en": "Phone number OSINT: format, country, carrier, lookups.",
-      "note_es": "Activa; binario Go de releases.",
-      "note_en": "Active; Go binary from releases.",
+      "source": "download",
+      "desc_es": "OSINT de números de teléfono: formato, país, operador y búsquedas.",
+      "desc_en": "Phone number OSINT: format, country, carrier and lookups.",
+      "note_es": "Binario Go desde las releases oficiales.",
+      "note_en": "Go binary from official releases.",
       "repo": "https://github.com/sundowndev/phoneinfoga",
       "install": [
         {"method": "run", "cmd": "wget --quiet https://github.com/sundowndev/phoneinfoga/releases/latest/download/phoneinfoga_linux_arm64.tar.gz -O $OPT/phoneinfoga.tar.gz"},
@@ -213,202 +208,15 @@
       "verify": {"cmd": "phoneinfoga --version"}
     },
     {
-      "id": "protosint",
-      "name": "ProtoSINT",
-      "category": "osint",
-      "status": "active",
-      "desc_es": "OSINT orientado a organizaciones y empresas.",
-      "desc_en": "Organization-focused OSINT.",
-      "note_es": "Activa.",
-      "note_en": "Active.",
-      "repo": "https://github.com/pixelbubble/ProtOSINT",
-      "install": [
-        {"method": "git", "url": "https://github.com/pixelbubble/ProtOSINT", "name": "protosint"},
-        {"method": "launcher", "name": "protosint", "script": "#!/bin/bash\ncd $OPT/protosint\nexec python3 protosint.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/protosint"},
-        {"method": "run", "cmd": "rm -f $BIN/protosint"}
-      ],
-      "verify": {"bin": "protosint"}
-    },
-    {
-      "id": "magmaosint",
-      "name": "MagmaOSINT",
-      "category": "osint",
-      "status": "active",
-      "desc_es": "OSINT de números de teléfono y datos personales (fuentes públicas).",
-      "desc_en": "Phone number and personal data OSINT (public sources).",
-      "note_es": "Activa (thewhiteh4t).",
-      "note_en": "Active (thewhiteh4t).",
-      "repo": "https://github.com/thewhiteh4t/magmaosint",
-      "install": [
-        {"method": "git", "url": "https://github.com/thewhiteh4t/magmaosint", "name": "magmaosint"},
-        {"method": "pip", "packages": ["requests", "colorama", "bs4"]},
-        {"method": "launcher", "name": "magmaosint", "script": "#!/bin/bash\ncd $OPT/magmaosint\nexec python3 magmaosint.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/magmaosint"},
-        {"method": "run", "cmd": "rm -f $BIN/magmaosint"}
-      ],
-      "verify": {"bin": "magmaosint"}
-    },
-    {
-      "id": "pwnedornot",
-      "name": "PwnedOrNot",
-      "category": "osint",
-      "status": "active",
-      "desc_es": "Comprueba emails filtrados en brechas vía HIBP.",
-      "desc_en": "Check emails exposed in breaches via HIBP.",
-      "note_es": "Activa.",
-      "note_en": "Active.",
-      "repo": "https://github.com/thewhiteh4t/pwnedOrNot",
-      "install": [
-        {"method": "git", "url": "https://github.com/thewhiteh4t/pwnedOrNot", "name": "pwnedornot"},
-        {"method": "pip", "packages": ["requests", "colorama"]},
-        {"method": "launcher", "name": "pwnedornot", "script": "#!/bin/bash\ncd $OPT/pwnedornot\nexec python3 pwnedornot.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/pwnedornot"},
-        {"method": "run", "cmd": "rm -f $BIN/pwnedornot"}
-      ],
-      "verify": {"bin": "pwnedornot"}
-    },
-    {
-      "id": "recondog",
-      "name": "ReconDog",
-      "category": "osint",
-      "status": "legacy",
-      "desc_es": "OSINT en consola: IP, dominio, emails, usuarios.",
-      "desc_en": "Console OSINT: IP, domain, emails, users.",
-      "note_es": "Sin mantenimiento claro; parcialmente funcional.",
-      "note_en": "No clear maintenance; partially functional.",
-      "repo": "https://github.com/loseys/ReconDog",
-      "install": [
-        {"method": "git", "url": "https://github.com/loseys/ReconDog", "name": "recondog"},
-        {"method": "pip", "packages": ["requests"]},
-        {"method": "launcher", "name": "recondog", "script": "#!/bin/bash\ncd $OPT/recondog\nexec python3 recondog.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/recondog"},
-        {"method": "run", "cmd": "rm -f $BIN/recondog"}
-      ],
-      "verify": {"bin": "recondog"}
-    },
-    {
-      "id": "iphunter",
-      "name": "IPHunter",
-      "category": "osint",
-      "status": "legacy",
-      "desc_es": "Información de IPs y búsquedas relacionadas.",
-      "desc_en": "IP information and related lookups.",
-      "note_es": "Obscura y poco mantenida.",
-      "note_en": "Obscure and barely maintained.",
-      "repo": "https://github.com/gayanvoice/iphunter",
-      "install": [
-        {"method": "git", "url": "https://github.com/gayanvoice/iphunter", "name": "iphunter"},
-        {"method": "launcher", "name": "iphunter", "script": "#!/bin/bash\ncd $OPT/iphunter\nexec python3 iphunter.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/iphunter"},
-        {"method": "run", "cmd": "rm -f $BIN/iphunter"}
-      ],
-      "verify": {"bin": "iphunter"}
-    },
-    {
-      "id": "email2pn",
-      "name": "Email2PN",
-      "category": "osint",
-      "status": "legacy",
-      "desc_es": "Intenta asociar emails con números de teléfono.",
-      "desc_en": "Attempts to associate emails with phone numbers.",
-      "note_es": "Obscura; resultados limitados.",
-      "note_en": "Obscure; limited results.",
-      "repo": "https://github.com/megadose/email2phone",
-      "install": [
-        {"method": "git", "url": "https://github.com/megadose/email2phone", "name": "email2pn"},
-        {"method": "pip", "packages": ["requests"]},
-        {"method": "launcher", "name": "email2pn", "script": "#!/bin/bash\ncd $OPT/email2pn\nexec python3 email2phone.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/email2pn"},
-        {"method": "run", "cmd": "rm -f $BIN/email2pn"}
-      ],
-      "verify": {"bin": "email2pn"}
-    },
-    {
-      "id": "wortex",
-      "name": "Wortex",
-      "category": "osint",
-      "status": "legacy",
-      "desc_es": "OSINT de dominio, email y teléfono.",
-      "desc_en": "Domain, email and phone OSINT.",
-      "note_es": "Obscura.",
-      "note_en": "Obscure.",
-      "repo": "https://github.com/devprabin/wortex",
-      "install": [
-        {"method": "git", "url": "https://github.com/devprabin/wortex", "name": "wortex"},
-        {"method": "pip", "packages": ["requests", "bs4"]},
-        {"method": "launcher", "name": "wortex", "script": "#!/bin/bash\ncd $OPT/wortex\nexec python3 wortex.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/wortex"},
-        {"method": "run", "cmd": "rm -f $BIN/wortex"}
-      ],
-      "verify": {"bin": "wortex"}
-    },
-    {
-      "id": "phone-dox",
-      "name": "Phone-Dox",
-      "category": "osint",
-      "status": "legacy",
-      "desc_es": "OSINT de números de teléfono.",
-      "desc_en": "Phone number OSINT.",
-      "note_es": "Obscura; considera phoneinfoga.",
-      "note_en": "Obscure; consider phoneinfoga.",
-      "replacement": ["phoneinfoga"],
-      "repo": "https://github.com/Vulnpire/phone-dox",
-      "install": [
-        {"method": "git", "url": "https://github.com/Vulnpire/phone-dox", "name": "phone-dox"},
-        {"method": "launcher", "name": "phone-dox", "script": "#!/bin/bash\ncd $OPT/phone-dox\nexec python3 phone-dox.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/phone-dox"},
-        {"method": "run", "cmd": "rm -f $BIN/phone-dox"}
-      ],
-      "verify": {"bin": "phone-dox"}
-    },
-    {
-      "id": "sigit",
-      "name": "SigIT",
-      "category": "osint",
-      "status": "obsolete",
-      "desc_es": "Recolección de información de perfiles de Instagram.",
-      "desc_en": "Instagram profile information gathering.",
-      "note_es": "Rota por cambios de API de Instagram. Evita cuentas ajenas.",
-      "note_en": "Broken by Instagram API changes. Avoid third-party accounts.",
-      "replacement": ["instaloader"],
-      "repo": "https://github.com/quantumcored/sigit",
-      "install": [
-        {"method": "git", "url": "https://github.com/quantumcored/sigit", "name": "sigit"},
-        {"method": "launcher", "name": "sigit", "script": "#!/bin/bash\ncd $OPT/sigit\nexec python3 sigit.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/sigit"},
-        {"method": "run", "cmd": "rm -f $BIN/sigit"}
-      ],
-      "verify": {"bin": "sigit"}
-    },
-    {
       "id": "instaloader",
       "name": "Instaloader",
       "category": "osint",
       "status": "active",
-      "desc_es": "Descarga perfiles, stories y posts de Instagram (uso con cuenta propia).",
-      "desc_en": "Download Instagram profiles, stories and posts (use with your own account).",
-      "note_es": "Sucesor moderno de SigIT.",
-      "note_en": "Modern successor to SigIT.",
-      "replacement": ["sigit"],
+      "source": "pip",
+      "desc_es": "Descarga perfiles, stories y posts de Instagram (cuenta propia).",
+      "desc_en": "Download Instagram profiles, stories and posts (own account).",
+      "note_es": "Se instala desde PyPI.",
+      "note_en": "Installed from PyPI.",
       "repo": "https://github.com/instaloader/instaloader",
       "install": [
         {"method": "pip", "packages": ["instaloader"]}
@@ -419,78 +227,13 @@
       "verify": {"cmd": "instaloader --version"}
     },
     {
-      "id": "fbuserid",
-      "name": "FBUserID",
-      "category": "osint",
-      "status": "obsolete",
-      "desc_es": "Obtiene el ID numérico de un perfil de Facebook.",
-      "desc_en": "Get the numeric ID of a Facebook profile.",
-      "note_es": "Roto por cambios de Facebook; sin mantenimiento.",
-      "note_en": "Broken by Facebook changes; unmaintained.",
-      "replacement": ["none"],
-      "repo": "https://github.com/thelinuxchoice/fbuserid",
-      "install": [
-        {"method": "git", "url": "https://github.com/thelinuxchoice/fbuserid", "name": "fbuserid"},
-        {"method": "launcher", "name": "fbuserid", "script": "#!/bin/bash\ncd $OPT/fbuserid\nexec bash fbuserid.sh \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/fbuserid"},
-        {"method": "run", "cmd": "rm -f $BIN/fbuserid"}
-      ],
-      "verify": {"bin": "fbuserid"}
-    },
-    {
-      "id": "onionsearch",
-      "name": "OnionSearch",
-      "category": "osint",
-      "status": "obsolete",
-      "desc_es": "Busca en buscadores de la red Tor.",
-      "desc_en": "Search Tor network search engines.",
-      "note_es": "Archivada; considera TorPhi (tu proyecto) para navegar Tor.",
-      "note_en": "Archived; consider TorPhi (your project) for Tor browsing.",
-      "replacement": ["torphi"],
-      "repo": "https://github.com/megadose/onion-search",
-      "install": [
-        {"method": "git", "url": "https://github.com/megadose/onion-search", "name": "onionsearch"},
-        {"method": "pip", "packages": ["requests", "bs4"]},
-        {"method": "launcher", "name": "onionsearch", "script": "#!/bin/bash\ncd $OPT/onionsearch\nexec python3 onion-search.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/onionsearch"},
-        {"method": "run", "cmd": "rm -f $BIN/onionsearch"}
-      ],
-      "verify": {"bin": "onionsearch"}
-    },
-    {
-      "id": "ecuador-id",
-      "name": "Ecuador-ID",
-      "category": "osint",
-      "status": "local",
-      "desc_es": "Valida y desglosa cédulas ecuatorianas.",
-      "desc_en": "Validates and breaks down Ecuadorian national ID numbers.",
-      "note_es": "Herramienta regional (Ecuador).",
-      "note_en": "Regional tool (Ecuador).",
-      "repo": "https://github.com/Darkmux/ecuador-id",
-      "install": [
-        {"method": "git", "url": "https://github.com/Darkmux/ecuador-id", "name": "ecuador-id"},
-        {"method": "launcher", "name": "ecuador-id", "script": "#!/bin/bash\ncd $OPT/ecuador-id\nexec python3 ecuador-id.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/ecuador-id"},
-        {"method": "run", "cmd": "rm -f $BIN/ecuador-id"}
-      ],
-      "verify": {"bin": "ecuador-id"}
-    },
-    {
       "id": "subfinder",
       "name": "Subfinder",
       "category": "osint",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Descubrimiento pasivo de subdominios de alta velocidad.",
       "desc_en": "Fast passive subdomain discovery.",
-      "note_es": "Reemplazo recomendado de sublist3r.",
-      "note_en": "Recommended replacement for sublist3r.",
-      "replacement": ["sublist3r"],
       "repo": "https://github.com/projectdiscovery/subfinder",
       "install": [
         {"method": "pkg", "packages": ["subfinder"]}
@@ -505,17 +248,14 @@
       "name": "Nmap",
       "category": "scan",
       "status": "active",
-      "desc_es": "Escáner de red de referencia: descubrimiento, puertos, servicios, scripts NSE.",
-      "desc_en": "Reference network scanner: discovery, ports, services, NSE scripts.",
-      "note_es": "Incluye ncat y NSE. Añade vulscan y nmap-vulners.",
-      "note_en": "Includes ncat and NSE. Adds vulscan and nmap-vulners.",
+      "source": "pkg",
+      "desc_es": "Escáner de red de referencia: descubrimiento, puertos, servicios y scripts NSE.",
+      "desc_en": "Reference network scanner: discovery, ports, services and NSE scripts.",
+      "note_es": "Se instala desde los repositorios de Termux.",
+      "note_en": "Installed from Termux repositories.",
       "repo": "https://github.com/nmap/nmap",
       "install": [
-        {"method": "pkg", "packages": ["nmap"]},
-        {"method": "git", "url": "https://github.com/scipag/vulscan", "name": "scipag_vulscan", "dest": "opt"},
-        {"method": "run", "cmd": "ln -sf $OPT/scipag_vulscan $SHARE/nmap/scripts/vulscan"},
-        {"method": "git", "url": "https://github.com/vulnersCom/nmap-vulners", "name": "nmap-vulners", "dest": "opt"},
-        {"method": "run", "cmd": "ln -sf $OPT/nmap-vulners $SHARE/nmap/scripts/nmap-vulners"}
+        {"method": "pkg", "packages": ["nmap"]}
       ],
       "remove": [
         {"method": "run", "cmd": "pkg uninstall -y nmap"}
@@ -527,10 +267,9 @@
       "name": "Gobuster",
       "category": "scan",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Fuerza bruta de directorios, DNS y vhosts.",
       "desc_en": "Directory, DNS and vhost brute forcing.",
-      "note_es": "Activa y rápida.",
-      "note_en": "Active and fast.",
       "repo": "https://github.com/OJ/gobuster",
       "install": [
         {"method": "pkg", "packages": ["gobuster"]}
@@ -541,34 +280,13 @@
       "verify": {"cmd": "gobuster version"}
     },
     {
-      "id": "dirb",
-      "name": "Dirb",
-      "category": "scan",
-      "status": "legacy",
-      "desc_es": "Escáner de directorios web por fuerza bruta.",
-      "desc_en": "Web directory brute-force scanner.",
-      "note_es": "Funciona pero es lento; usa gobuster o ffuf.",
-      "note_en": "Works but slow; use gobuster or ffuf.",
-      "replacement": ["gobuster", "ffuf"],
-      "repo": "https://github.com/v0re/dirb",
-      "install": [
-        {"method": "pkg", "packages": ["dirb"]}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "pkg uninstall -y dirb"}
-      ],
-      "verify": {"cmd": "dirb"}
-    },
-    {
       "id": "ffuf",
       "name": "FFUF",
       "category": "scan",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Fuzzing web de alta velocidad (directorios, params, vhosts).",
       "desc_en": "Fast web fuzzer (dirs, params, vhosts).",
-      "note_es": "Reemplazo moderno de dirb.",
-      "note_en": "Modern replacement for dirb.",
-      "replacement": ["dirb"],
       "repo": "https://github.com/ffuf/ffuf",
       "install": [
         {"method": "pkg", "packages": ["ffuf"]}
@@ -583,10 +301,9 @@
       "name": "Nikto",
       "category": "scan",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Escáner de vulnerabilidades y misconfiguración en servidores web.",
       "desc_en": "Web server vulnerability and misconfiguration scanner.",
-      "note_es": "Activa (v2.5.0+).",
-      "note_en": "Active (v2.5.0+).",
       "repo": "https://github.com/sullo/nikto",
       "install": [
         {"method": "pkg", "packages": ["nikto"]}
@@ -601,10 +318,9 @@
       "name": "WhatWeb",
       "category": "scan",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Fingerprinting de tecnologías de sitios web.",
       "desc_en": "Web technology fingerprinting.",
-      "note_es": "Activa.",
-      "note_en": "Active.",
       "repo": "https://github.com/urbanadventurer/WhatWeb",
       "install": [
         {"method": "pkg", "packages": ["whatweb"]}
@@ -619,11 +335,9 @@
       "name": "Sublist3r",
       "category": "scan",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Enumeración de subdominios mediante fuentes abiertas.",
       "desc_en": "Subdomain enumeration via open sources.",
-      "note_es": "Funciona pero lenta; subfinder es más rápido.",
-      "note_en": "Works but slow; subfinder is faster.",
-      "replacement": ["subfinder"],
       "repo": "https://github.com/aboul3la/Sublist3r",
       "install": [
         {"method": "pkg", "packages": ["sublist3r"]}
@@ -638,10 +352,9 @@
       "name": "Arjun",
       "category": "scan",
       "status": "active",
+      "source": "pip",
       "desc_es": "Descubrimiento de parámetros HTTP ocultos.",
       "desc_en": "HTTP parameter discovery.",
-      "note_es": "Activa.",
-      "note_en": "Active.",
       "repo": "https://github.com/s0md3v/Arjun",
       "install": [
         {"method": "pip", "packages": ["arjun"]}
@@ -652,50 +365,13 @@
       "verify": {"cmd": "arjun --help"}
     },
     {
-      "id": "aquatone",
-      "name": "Aquatone",
-      "category": "scan",
-      "status": "obsolete",
-      "desc_es": "Capturas de pantalla y fingerprinting de subdominios.",
-      "desc_en": "Subdomain screenshots and fingerprinting.",
-      "note_es": "Proyecto archivado (2021). Usa httpx + screenshots.",
-      "note_en": "Project archived (2021). Use httpx + screenshots.",
-      "replacement": ["httpx", "eyewitness"],
-      "repo": "https://github.com/michenriksen/aquatone",
-      "install": [
-        {"method": "run", "cmd": "echo 'Aquatone está archivado. Instala httpx en su lugar: phi install httpx'"}
-      ],
-      "remove": [],
-      "verify": {"cmd": "false"}
-    },
-    {
-      "id": "httpx",
-      "name": "httpx",
-      "category": "scan",
-      "status": "active",
-      "desc_es": "Probing HTTP de hosts: status, título, tecnologías, screenshots.",
-      "desc_en": "HTTP host probing: status, title, tech, screenshots.",
-      "note_es": "Reemplazo moderno de Aquatone.",
-      "note_en": "Modern replacement for Aquatone.",
-      "replacement": ["aquatone"],
-      "repo": "https://github.com/projectdiscovery/httpx",
-      "install": [
-        {"method": "run", "cmd": "GOBIN=$BIN go install github.com/projectdiscovery/httpx/cmd/httpx@latest"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -f $BIN/httpx"}
-      ],
-      "verify": {"cmd": "httpx -version"}
-    },
-    {
       "id": "nuclei",
       "name": "Nuclei",
       "category": "scan",
       "status": "active",
-      "desc_es": "Escáner de vulnerabilidades basado en plantillas YAML (projectdiscovery).",
+      "source": "pkg",
+      "desc_es": "Escáner de vulnerabilidades basado en plantillas (projectdiscovery).",
       "desc_en": "Template-based vulnerability scanner (projectdiscovery).",
-      "note_es": "Muy activa; base de plantillas en constante crecimiento.",
-      "note_en": "Very active; rapidly growing template base.",
       "repo": "https://github.com/projectdiscovery/nuclei",
       "install": [
         {"method": "pkg", "packages": ["nuclei"]}
@@ -706,56 +382,39 @@
       "verify": {"cmd": "nuclei -version"}
     },
     {
-      "id": "redhawk",
-      "name": "RedHawk",
-      "category": "scan",
-      "status": "obsolete",
-      "desc_es": "Escáner web todo-en-uno (info, CMS, subdominios).",
-      "desc_en": "All-in-one web scanner (info, CMS, subdomains).",
-      "note_es": "Archivada. Usa nmap + whatweb + nuclei.",
-      "note_en": "Archived. Use nmap + whatweb + nuclei.",
-      "replacement": ["nmap", "whatweb", "nuclei"],
-      "repo": "https://github.com/Tuhinshubhra/RED_HAWK",
-      "install": [
-        {"method": "git", "url": "https://github.com/Tuhinshubhra/RED_HAWK", "name": "redhawk"},
-        {"method": "launcher", "name": "redhawk", "script": "#!/bin/bash\ncd $OPT/redhawk\nexec php redhawk.php \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/redhawk"},
-        {"method": "run", "cmd": "rm -f $BIN/redhawk"}
-      ],
-      "verify": {"bin": "redhawk"}
-    },
-    {
       "id": "sqlmap",
       "name": "SQLMap",
       "category": "web",
       "status": "active",
+      "source": "vendor",
       "desc_es": "Detección y explotación automatizada de inyecciones SQL.",
       "desc_en": "Automated SQL injection detection and exploitation.",
-      "note_es": "Muy activa; el estándar de facto.",
-      "note_en": "Very active; the de facto standard.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/sqlmapproject/sqlmap",
       "install": [
-        {"method": "pkg", "packages": ["sqlmap"]}
+        {"method": "vendor", "name": "sqlmap"},
+        {"method": "launcher", "name": "sqlmap", "script": "#!/bin/bash\ncd $OPT/sqlmap\nexec python3 sqlmap.py \"$@\"\n"}
       ],
       "remove": [
-        {"method": "run", "cmd": "pkg uninstall -y sqlmap"}
+        {"method": "run", "cmd": "rm -rf $OPT/sqlmap"},
+        {"method": "run", "cmd": "rm -f $BIN/sqlmap"}
       ],
-      "verify": {"cmd": "sqlmap --version"}
+      "verify": {"exists": "$OPT/sqlmap/sqlmap.py"}
     },
     {
       "id": "xsstrike",
       "name": "XSS Strike",
       "category": "web",
       "status": "active",
+      "source": "vendor",
       "desc_es": "Detección y explotación avanzada de XSS.",
       "desc_en": "Advanced XSS detection and exploitation.",
-      "note_es": "Activa.",
-      "note_en": "Active.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/s0md3v/XSStrike",
       "install": [
-        {"method": "git", "url": "https://github.com/s0md3v/XSStrike", "name": "xsstrike"},
+        {"method": "vendor", "name": "xsstrike"},
         {"method": "pip", "packages": ["requests"]},
         {"method": "launcher", "name": "xsstrike", "script": "#!/bin/bash\ncd $OPT/xsstrike\nexec python3 xsstrike.py \"$@\"\n"}
       ],
@@ -763,20 +422,21 @@
         {"method": "run", "cmd": "rm -rf $OPT/xsstrike"},
         {"method": "run", "cmd": "rm -f $BIN/xsstrike"}
       ],
-      "verify": {"bin": "xsstrike"}
+      "verify": {"exists": "$OPT/xsstrike/xsstrike.py"}
     },
     {
       "id": "photon",
       "name": "Photon",
       "category": "web",
       "status": "active",
-      "desc_es": "Crawler web rápido para extraer URLs, emails, archivos, secretos.",
-      "desc_en": "Fast web crawler to extract URLs, emails, files, secrets.",
-      "note_es": "Activa (s0md3v).",
-      "note_en": "Active (s0md3v).",
+      "source": "vendor",
+      "desc_es": "Crawler web rápido para extraer URLs, emails, archivos y secretos.",
+      "desc_en": "Fast web crawler to extract URLs, emails, files and secrets.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/s0md3v/Photon",
       "install": [
-        {"method": "git", "url": "https://github.com/s0md3v/Photon", "name": "photon"},
+        {"method": "vendor", "name": "photon"},
         {"method": "pip", "packages": ["requests", "bs4"]},
         {"method": "launcher", "name": "photon", "script": "#!/bin/bash\ncd $OPT/photon\nexec python3 photon.py \"$@\"\n"}
       ],
@@ -784,287 +444,56 @@
         {"method": "run", "cmd": "rm -rf $OPT/photon"},
         {"method": "run", "cmd": "rm -f $BIN/photon"}
       ],
-      "verify": {"bin": "photon"}
+      "verify": {"exists": "$OPT/photon/photon.py"}
     },
     {
       "id": "slowloris",
       "name": "SlowLoris",
       "category": "web",
-      "status": "legacy",
-      "desc_es": "DoS de capa 7 (mantiene conexiones abiertas).",
-      "desc_en": "Layer-7 DoS (keeps connections open).",
-      "note_es": "Vieja pero simple. Solo para tests autorizados. Alternativa: hping3.",
-      "note_en": "Old but simple. Authorized tests only. Alternative: hping3.",
-      "replacement": ["hping3"],
+      "status": "active",
+      "source": "vendor",
+      "desc_es": "DoS de capa 7 manteniendo conexiones abiertas. Solo tests autorizados.",
+      "desc_en": "Layer-7 DoS keeping connections open. Authorized tests only.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/gkbrk/slowloris",
       "install": [
-        {"method": "git", "url": "https://github.com/gkbrk/slowloris", "name": "slowloris"},
+        {"method": "vendor", "name": "slowloris"},
         {"method": "launcher", "name": "slowloris", "script": "#!/bin/bash\ncd $OPT/slowloris\nexec python3 slowloris.py \"$@\"\n"}
       ],
       "remove": [
         {"method": "run", "cmd": "rm -rf $OPT/slowloris"},
         {"method": "run", "cmd": "rm -f $BIN/slowloris"}
       ],
-      "verify": {"bin": "slowloris"}
-    },
-    {
-      "id": "beef-xss",
-      "name": "BeEF",
-      "category": "web",
-      "status": "active",
-      "desc_es": "Framework de explotación del navegador (browser exploitation).",
-      "desc_en": "Browser exploitation framework.",
-      "note_es": "Activa (v0.5+). Para pentests autorizados.",
-      "note_en": "Active (v0.5+). For authorized pentests.",
-      "repo": "https://github.com/beefproject/beef",
-      "install": [
-        {"method": "git", "url": "https://github.com/beefproject/beef", "name": "beef"},
-        {"method": "run", "cmd": "cd $OPT/beef && gem install bundler && bundle install 2>/dev/null || true"},
-        {"method": "launcher", "name": "beef-xss", "script": "#!/bin/bash\ncd $OPT/beef\nexec ruby ./beef \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/beef"},
-        {"method": "run", "cmd": "rm -f $BIN/beef-xss"}
-      ],
-      "verify": {"bin": "beef-xss"}
-    },
-    {
-      "id": "weeman",
-      "name": "Weeman",
-      "category": "phishing",
-      "status": "obsolete",
-      "desc_es": "Kit de phishing por clonación de páginas (HTTP).",
-      "desc_en": "HTTP page-cloning phishing kit.",
-      "note_es": "Abandonado. Usa zphisher o tu Lamdaphi.",
-      "note_en": "Abandoned. Use zphisher or your Lamdaphi.",
-      "replacement": ["zphisher", "lamdaphi"],
-      "repo": "https://github.com/evait-security/weeman",
-      "install": [
-        {"method": "git", "url": "https://github.com/evait-security/weeman", "name": "weeman"},
-        {"method": "launcher", "name": "weeman", "script": "#!/bin/bash\ncd $OPT/weeman\nexec python2 weeman.py \"$@\" 2>/dev/null || exec python3 weeman.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/weeman"},
-        {"method": "run", "cmd": "rm -f $BIN/weeman"}
-      ],
-      "verify": {"bin": "weeman"}
-    },
-    {
-      "id": "zphisher",
-      "name": "Zphisher",
-      "category": "phishing",
-      "status": "active",
-      "desc_es": "Kit de phishing automatizado con túneles (Cloudflare, localhost.run).",
-      "desc_en": "Automated phishing kit with tunnels (Cloudflare, localhost.run).",
-      "note_es": "Activa. Solo uso autorizado.",
-      "note_en": "Active. Authorized use only.",
-      "replacement": ["weeman"],
-      "repo": "https://github.com/htr-tech/zphisher",
-      "install": [
-        {"method": "git", "url": "https://github.com/htr-tech/zphisher", "name": "zphisher"},
-        {"method": "launcher", "name": "zphisher", "script": "#!/bin/bash\ncd $OPT/zphisher\nexec bash zphisher.sh \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/zphisher"},
-        {"method": "run", "cmd": "rm -f $BIN/zphisher"}
-      ],
-      "verify": {"bin": "zphisher"}
-    },
-    {
-      "id": "saycheese",
-      "name": "SayCheese",
-      "category": "phishing",
-      "status": "obsolete",
-      "desc_es": "Captura de webcam mediante página de permiso falsa.",
-      "desc_en": "Webcam capture via fake permission page.",
-      "note_es": "Del autor de thelinuxchoice (archivado). Riesgo ético alto.",
-      "note_en": "From thelinuxchoice author (archived). High ethical risk.",
-      "replacement": ["seeker"],
-      "repo": "https://github.com/thelinuxchoice/saycheese",
-      "install": [
-        {"method": "git", "url": "https://github.com/thelinuxchoice/saycheese", "name": "saycheese"},
-        {"method": "launcher", "name": "saycheese", "script": "#!/bin/bash\ncd $OPT/saycheese\nexec bash saycheese.sh \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/saycheese"},
-        {"method": "run", "cmd": "rm -f $BIN/saycheese"}
-      ],
-      "verify": {"bin": "saycheese"}
-    },
-    {
-      "id": "seeker",
-      "name": "Seeker",
-      "category": "phishing",
-      "status": "active",
-      "desc_es": "Geolocalización por phishing con página de permiso de ubicación.",
-      "desc_en": "Geolocation phishing via location-permission page.",
-      "note_es": "Activa (thewhiteh4t). Solo uso autorizado.",
-      "note_en": "Active (thewhiteh4t). Authorized use only.",
-      "repo": "https://github.com/thewhiteh4t/seeker",
-      "install": [
-        {"method": "git", "url": "https://github.com/thewhiteh4t/seeker", "name": "seeker"},
-        {"method": "launcher", "name": "seeker", "script": "#!/bin/bash\ncd $OPT/seeker\nexec bash install.sh >/dev/null 2>&1 && exec python3 seeker.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/seeker"},
-        {"method": "run", "cmd": "rm -f $BIN/seeker"}
-      ],
-      "verify": {"bin": "seeker"}
-    },
-    {
-      "id": "gophish",
-      "name": "GoPhish",
-      "category": "phishing",
-      "status": "active",
-      "desc_es": "Framework open source de phishing (campañas y reportes).",
-      "desc_en": "Open source phishing framework (campaigns and reporting).",
-      "note_es": "Activa. Para simulaciones autorizadas.",
-      "note_en": "Active. For authorized simulations.",
-      "repo": "https://github.com/gophish/gophish",
-      "install": [
-        {"method": "run", "cmd": "wget --quiet https://github.com/gophish/gophish/releases/latest/download/gophish-v0.12.1-linux-64bit.zip -O $OPT/gophish.zip"},
-        {"method": "run", "cmd": "cd $OPT && unzip -o gophish.zip -d gophish && rm -f gophish.zip && chmod +x gophish/gophish"},
-        {"method": "launcher", "name": "gophish", "script": "#!/bin/bash\ncd $OPT/gophish\nexec ./gophish \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/gophish"},
-        {"method": "run", "cmd": "rm -f $BIN/gophish"}
-      ],
-      "verify": {"bin": "gophish"}
-    },
-    {
-      "id": "evilurl",
-      "name": "EvilURL",
-      "category": "phishing",
-      "status": "obsolete",
-      "desc_es": "Generador de URL maliciosas con enmascaramiento.",
-      "desc_en": "Malicious URL generator with masking.",
-      "note_es": "Del autor thelinuxchoice (archivado).",
-      "note_en": "From thelinuxchoice author (archived).",
-      "replacement": ["none"],
-      "repo": "https://github.com/UndeadSec/EvilURL",
-      "install": [
-        {"method": "git", "url": "https://github.com/UndeadSec/EvilURL", "name": "evilurl"},
-        {"method": "launcher", "name": "evilurl", "script": "#!/bin/bash\ncd $OPT/evilurl\nexec python3 evilurl.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/evilurl"},
-        {"method": "run", "cmd": "rm -f $BIN/evilurl"}
-      ],
-      "verify": {"bin": "evilurl"}
-    },
-    {
-      "id": "ghost",
-      "name": "Ghost",
-      "category": "phishing",
-      "status": "obsolete",
-      "desc_es": "Framework de phishing del navegador.",
-      "desc_en": "Browser phishing framework.",
-      "note_es": "Archivado (entynetproject).",
-      "note_en": "Archived (entynetproject).",
-      "replacement": ["gophish", "beef-xss"],
-      "repo": "https://github.com/entynetproject/ghost",
-      "install": [
-        {"method": "git", "url": "https://github.com/entynetproject/ghost", "name": "ghost"},
-        {"method": "launcher", "name": "ghost", "script": "#!/bin/bash\ncd $OPT/ghost\nexec python3 ghost.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/ghost"},
-        {"method": "run", "cmd": "rm -f $BIN/ghost"}
-      ],
-      "verify": {"bin": "ghost"}
-    },
-    {
-      "id": "transwer",
-      "name": "Transwer",
-      "category": "phishing",
-      "status": "legacy",
-      "desc_es": "Transferencia de archivos con enmascaramiento.",
-      "desc_en": "File transfer with masking.",
-      "note_es": "Obscura.",
-      "note_en": "Obscure.",
-      "repo": "https://github.com/r3nt0n/tranx",
-      "install": [
-        {"method": "git", "url": "https://github.com/r3nt0n/tranx", "name": "transwer"},
-        {"method": "launcher", "name": "transwer", "script": "#!/bin/bash\ncd $OPT/transwer\nexec python3 transwer.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/transwer"},
-        {"method": "run", "cmd": "rm -f $BIN/transwer"}
-      ],
-      "verify": {"bin": "transwer"}
+      "verify": {"exists": "$OPT/slowloris/slowloris.py"}
     },
     {
       "id": "metasploit",
       "name": "Metasploit",
       "category": "exploit",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Framework de explotación de referencia (exploits, payloads, auxiliares).",
       "desc_en": "Reference exploitation framework (exploits, payloads, auxiliaries).",
-      "note_es": "Activa; en Termux del repositorio community. Instalación pesada.",
-      "note_en": "Active; Termux community repo. Heavy install.",
+      "note_es": "Instalación pesada desde el repositorio community de Termux.",
+      "note_en": "Heavy install from Termux community repository.",
       "repo": "https://github.com/rapid7/metasploit-framework",
       "install": [
-        {"method": "run", "cmd": "pkg install -y metasploit 2>/dev/null || pkg install -y metasploit-framework 2>/dev/null || echo 'Revisa: pkg install metasploit en el repositorio community de Termux'"}
+        {"method": "pkg", "packages": ["metasploit"]}
       ],
       "remove": [
-        {"method": "run", "cmd": "pkg uninstall -y metasploit 2>/dev/null || pkg uninstall -y metasploit-framework"}
+        {"method": "run", "cmd": "pkg uninstall -y metasploit"}
       ],
       "verify": {"cmd": "msfconsole --version"}
-    },
-    {
-      "id": "routersploit",
-      "name": "Routersploit",
-      "category": "exploit",
-      "status": "obsolete",
-      "desc_es": "Framework de explotación de routers y dispositivos embebidos.",
-      "desc_en": "Router and embedded device exploitation framework.",
-      "note_es": "Archivado (2022). Usa módulos auxiliares de Metasploit.",
-      "note_en": "Archived (2022). Use Metasploit auxiliary modules.",
-      "replacement": ["metasploit"],
-      "repo": "https://github.com/threat9/routersploit",
-      "install": [
-        {"method": "git", "url": "https://github.com/threat9/routersploit", "name": "routersploit"},
-        {"method": "pip", "packages": ["requests", "paramiko", "pysnmp"]},
-        {"method": "launcher", "name": "routersploit", "script": "#!/bin/bash\ncd $OPT/routersploit\nexec python3 rsf.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/routersploit"},
-        {"method": "run", "cmd": "rm -f $BIN/routersploit"}
-      ],
-      "verify": {"bin": "routersploit"}
-    },
-    {
-      "id": "phonesploit",
-      "name": "PhoneSploit",
-      "category": "exploit",
-      "status": "obsolete",
-      "desc_es": "Framework de explotación de Android vía ADB.",
-      "desc_en": "Android exploitation framework over ADB.",
-      "note_es": "Archivado (entynetproject). ADB moderno lo sustituye parcialmente.",
-      "note_en": "Archived (entynetproject). Modern ADB partially replaces it.",
-      "replacement": ["adb"],
-      "repo": "https://github.com/AzeemIdrisi/PhoneSploit-Pro",
-      "install": [
-        {"method": "git", "url": "https://github.com/AzeemIdrisi/PhoneSploit-Pro", "name": "phonesploit"},
-        {"method": "pip", "packages": ["colorama", "requests"]},
-        {"method": "launcher", "name": "phonesploit", "script": "#!/bin/bash\ncd $OPT/phonesploit\nexec python3 phonesploit.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/phonesploit"},
-        {"method": "run", "cmd": "rm -f $BIN/phonesploit"}
-      ],
-      "verify": {"bin": "phonesploit"}
     },
     {
       "id": "hydra",
       "name": "Hydra",
       "category": "crack",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Ataque de fuerza bruta a credenciales de muchos servicios.",
       "desc_en": "Credential brute-force for many services.",
-      "note_es": "Activa; el estándar para fuerza bruta online.",
-      "note_en": "Active; the standard for online brute force.",
       "repo": "https://github.com/vanhauser-thc/thc-hydra",
       "install": [
         {"method": "pkg", "packages": ["hydra"]}
@@ -1079,10 +508,9 @@
       "name": "John the Ripper",
       "category": "crack",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Cracker de hashes (Jumbo).",
       "desc_en": "Hash cracker (Jumbo).",
-      "note_es": "Activa.",
-      "note_en": "Active.",
       "repo": "https://github.com/openwall/john",
       "install": [
         {"method": "pkg", "packages": ["john"]}
@@ -1093,14 +521,30 @@
       "verify": {"cmd": "john --version"}
     },
     {
+      "id": "hashcat",
+      "name": "Hashcat",
+      "category": "crack",
+      "status": "active",
+      "source": "pkg",
+      "desc_es": "Recuperación avanzada de contraseñas por GPU/CPU.",
+      "desc_en": "Advanced password recovery via GPU/CPU.",
+      "repo": "https://github.com/hashcat/hashcat",
+      "install": [
+        {"method": "pkg", "packages": ["hashcat"]}
+      ],
+      "remove": [
+        {"method": "run", "cmd": "pkg uninstall -y hashcat"}
+      ],
+      "verify": {"cmd": "hashcat --version"}
+    },
+    {
       "id": "crunch",
       "name": "Crunch",
       "category": "crack",
-      "status": "legacy",
+      "status": "active",
+      "source": "pkg",
       "desc_es": "Generador de wordlists por patrones.",
       "desc_en": "Pattern-based wordlist generator.",
-      "note_es": "Vieja pero funcional.",
-      "note_en": "Old but functional.",
       "repo": "https://github.com/crunchsec/crunch",
       "install": [
         {"method": "pkg", "packages": ["crunch"]}
@@ -1114,93 +558,118 @@
       "id": "cupp",
       "name": "CUPP",
       "category": "crack",
-      "status": "legacy",
+      "status": "active",
+      "source": "vendor",
       "desc_es": "Genera wordlists personalizadas a partir de datos de la víctima.",
       "desc_en": "Generates personalized wordlists from victim data.",
-      "note_es": "Funciona; útil para ingeniería social autorizada.",
-      "note_en": "Works; useful for authorized social engineering.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/Mebus/cupp",
       "install": [
-        {"method": "git", "url": "https://github.com/Mebus/cupp", "name": "cupp"},
+        {"method": "vendor", "name": "cupp"},
         {"method": "launcher", "name": "cupp", "script": "#!/bin/bash\ncd $OPT/cupp\nexec python3 cupp.py \"$@\"\n"}
       ],
       "remove": [
         {"method": "run", "cmd": "rm -rf $OPT/cupp"},
         {"method": "run", "cmd": "rm -f $BIN/cupp"}
       ],
-      "verify": {"bin": "cupp"}
-    },
-    {
-      "id": "hash-buster",
-      "name": "Hash-Buster",
-      "category": "crack",
-      "status": "legacy",
-      "desc_es": "Identifica y 'revierte' hashes mediante bases online.",
-      "desc_en": "Identifies and 'cracks' hashes via online databases.",
-      "note_es": "Vieja. Usa john/hashcat para crack real.",
-      "note_en": "Old. Use john/hashcat for real cracking.",
-      "replacement": ["john", "hashcat"],
-      "repo": "https://github.com/s0md3v/oh-my-hash",
-      "install": [
-        {"method": "git", "url": "https://github.com/s0md3v/oh-my-hash", "name": "hash-buster"},
-        {"method": "launcher", "name": "hash-buster", "script": "#!/bin/bash\ncd $OPT/hash-buster\nexec python3 oh-my-hash.py \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/hash-buster"},
-        {"method": "run", "cmd": "rm -f $BIN/hash-buster"}
-      ],
-      "verify": {"bin": "hash-buster"}
+      "verify": {"exists": "$OPT/cupp/cupp.py"}
     },
     {
       "id": "hash-id",
       "name": "HashID",
       "category": "crack",
       "status": "active",
+      "source": "vendor",
       "desc_es": "Identifica el tipo de hash.",
       "desc_en": "Identifies hash types.",
-      "note_es": "Activa.",
-      "note_en": "Active.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/psypanda/hashID",
       "install": [
-        {"method": "git", "url": "https://github.com/psypanda/hashID", "name": "hash-id"},
+        {"method": "vendor", "name": "hash-id"},
         {"method": "launcher", "name": "hash-id", "script": "#!/bin/bash\ncd $OPT/hash-id\nexec python3 hashid.py \"$@\"\n"}
       ],
       "remove": [
         {"method": "run", "cmd": "rm -rf $OPT/hash-id"},
         {"method": "run", "cmd": "rm -f $BIN/hash-id"}
       ],
-      "verify": {"bin": "hash-id"}
+      "verify": {"exists": "$OPT/hash-id/hashid.py"}
     },
     {
-      "id": "hashcrypt",
-      "name": "HashCrypt",
-      "category": "crack",
-      "status": "legacy",
-      "desc_es": "Cifra y descifra con distintos algoritmos de hash.",
-      "desc_en": "Encrypts and decrypts with various hash algorithms.",
-      "note_es": "Obscura.",
-      "note_en": "Obscure.",
-      "repo": "https://github.com/thelinuxchoice/hashcrypt",
+      "id": "zphisher",
+      "name": "Zphisher",
+      "category": "phishing",
+      "status": "active",
+      "source": "vendor",
+      "desc_es": "Kit de phishing automatizado con túneles. Solo uso autorizado.",
+      "desc_en": "Automated phishing kit with tunnels. Authorized use only.",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
+      "repo": "https://github.com/htr-tech/zphisher",
       "install": [
-        {"method": "git", "url": "https://github.com/thelinuxchoice/hashcrypt", "name": "hashcrypt"},
-        {"method": "launcher", "name": "hashcrypt", "script": "#!/bin/bash\ncd $OPT/hashcrypt\nexec python3 hashcrypt.py \"$@\"\n"}
+        {"method": "vendor", "name": "zphisher"},
+        {"method": "pkg", "packages": ["php", "wget", "curl"]},
+        {"method": "launcher", "name": "zphisher", "script": "#!/bin/bash\ncd $OPT/zphisher\nexec bash zphisher.sh \"$@\"\n"}
       ],
       "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/hashcrypt"},
-        {"method": "run", "cmd": "rm -f $BIN/hashcrypt"}
+        {"method": "run", "cmd": "rm -rf $OPT/zphisher"},
+        {"method": "run", "cmd": "rm -f $BIN/zphisher"}
       ],
-      "verify": {"bin": "hashcrypt"}
+      "verify": {"exists": "$OPT/zphisher/zphisher.sh"}
+    },
+    {
+      "id": "seeker",
+      "name": "Seeker",
+      "category": "phishing",
+      "status": "active",
+      "source": "vendor",
+      "desc_es": "Geolocalización por phishing con página de permiso de ubicación.",
+      "desc_en": "Geolocation phishing via location-permission page.",
+      "note_es": "Código vendorizado. Solo uso autorizado.",
+      "note_en": "Vendored source. Authorized use only.",
+      "repo": "https://github.com/thewhiteh4t/seeker",
+      "install": [
+        {"method": "vendor", "name": "seeker"},
+        {"method": "launcher", "name": "seeker", "script": "#!/bin/bash\ncd $OPT/seeker\nexec python3 seeker.py \"$@\"\n"}
+      ],
+      "remove": [
+        {"method": "run", "cmd": "rm -rf $OPT/seeker"},
+        {"method": "run", "cmd": "rm -f $BIN/seeker"}
+      ],
+      "verify": {"exists": "$OPT/seeker/seeker.py"}
+    },
+    {
+      "id": "gophish",
+      "name": "GoPhish",
+      "category": "phishing",
+      "status": "active",
+      "source": "download",
+      "desc_es": "Framework open source de phishing (campañas y reportes).",
+      "desc_en": "Open source phishing framework (campaigns and reporting).",
+      "note_es": "Binario Go desde las releases oficiales.",
+      "note_en": "Go binary from official releases.",
+      "repo": "https://github.com/gophish/gophish",
+      "install": [
+        {"method": "run", "cmd": "wget --quiet https://github.com/gophish/gophish/releases/latest/download/gophish-v0.12.1-linux-64bit.zip -O $OPT/gophish.zip"},
+        {"method": "run", "cmd": "cd $OPT && unzip -o gophish.zip -d gophish && rm -f gophish.zip && chmod +x gophish/gophish"},
+        {"method": "launcher", "name": "gophish", "script": "#!/bin/bash\ncd $OPT/gophish\nexec ./gophish \"$@\"\n"}
+      ],
+      "remove": [
+        {"method": "run", "cmd": "rm -rf $OPT/gophish"},
+        {"method": "run", "cmd": "rm -f $BIN/gophish"}
+      ],
+      "verify": {"bin": "gophish"}
     },
     {
       "id": "netcat",
       "name": "Netcat",
       "category": "wireless",
-      "status": "legacy",
+      "status": "active",
+      "source": "pkg",
       "desc_es": "Herramienta de red clásica (TCP/UDP).",
       "desc_en": "Classic network tool (TCP/UDP).",
-      "note_es": "Vieja; ncat (incluida en nmap) la mejora.",
-      "note_en": "Old; ncat (included with nmap) improves on it.",
-      "replacement": ["ncat"],
+      "repo": "https://github.com/cyberia-club/netcat-openbsd",
       "install": [
         {"method": "pkg", "packages": ["netcat-openbsd"]}
       ],
@@ -1210,34 +679,13 @@
       "verify": {"cmd": "nc -h"}
     },
     {
-      "id": "ncshare",
-      "name": "NCShare",
-      "category": "wireless",
-      "status": "legacy",
-      "desc_es": "Comparte archivos usando netcat.",
-      "desc_en": "Share files using netcat.",
-      "note_es": "Obscura.",
-      "note_en": "Obscure.",
-      "repo": "https://github.com/th3x/NCShare",
-      "install": [
-        {"method": "git", "url": "https://github.com/th3x/NCShare", "name": "ncshare"},
-        {"method": "launcher", "name": "ncshare", "script": "#!/bin/bash\ncd $OPT/ncshare\nexec bash ncshare.sh \"$@\"\n"}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "rm -rf $OPT/ncshare"},
-        {"method": "run", "cmd": "rm -f $BIN/ncshare"}
-      ],
-      "verify": {"bin": "ncshare"}
-    },
-    {
       "id": "exiftool",
       "name": "ExifTool",
       "category": "forense",
       "status": "active",
-      "desc_es": "Lee/escribe/borra metadatos EXIF en archivos multimedia.",
-      "desc_en": "Read/write/strip EXIF metadata in media files.",
-      "note_es": "Estándar de facto en forense.",
-      "note_en": "De facto forensics standard.",
+      "source": "pkg",
+      "desc_es": "Lee, escribe y borra metadatos EXIF en archivos multimedia.",
+      "desc_en": "Read, write and strip EXIF metadata in media files.",
       "repo": "https://github.com/exiftool/exiftool",
       "install": [
         {"method": "pkg", "packages": ["exiftool"]}
@@ -1251,33 +699,32 @@
       "id": "metagoofil",
       "name": "Metagoofil",
       "category": "forense",
-      "status": "legacy",
-      "desc_es": "Extrae metadatos de documentos públicos de un sitio.",
-      "desc_en": "Extracts metadata from public documents on a site.",
-      "note_es": "Original archivado; usa la versión v2 de opsdisk.",
-      "note_en": "Original archived; use the v2 version from opsdisk.",
-      "replacement": ["exiftool"],
+      "status": "active",
+      "source": "vendor",
+      "desc_es": "Extrae metadatos de documentos públicos de un sitio (versión opsdisk).",
+      "desc_en": "Extracts metadata from public documents on a site (opsdisk version).",
+      "note_es": "Código vendorizado.",
+      "note_en": "Vendored source.",
       "repo": "https://github.com/opsdisk/metagoofil",
       "install": [
-        {"method": "git", "url": "https://github.com/opsdisk/metagoofil", "name": "metagoofil"},
-        {"method": "pip", "packages": ["beautifulsoup4", "requests"]},
+        {"method": "vendor", "name": "metagoofil"},
+        {"method": "pip", "packages": ["requests", "beautifulsoup4"]},
         {"method": "launcher", "name": "metagoofil", "script": "#!/bin/bash\ncd $OPT/metagoofil\nexec python3 metagoofil.py \"$@\"\n"}
       ],
       "remove": [
         {"method": "run", "cmd": "rm -rf $OPT/metagoofil"},
         {"method": "run", "cmd": "rm -f $BIN/metagoofil"}
       ],
-      "verify": {"bin": "metagoofil"}
+      "verify": {"exists": "$OPT/metagoofil/metagoofil.py"}
     },
     {
       "id": "apktool",
       "name": "APKTool",
       "category": "forense",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Desensambla y reensambla APKs (ingeniería inversa Android).",
       "desc_en": "Disassemble and reassemble APKs (Android reverse engineering).",
-      "note_es": "Activa.",
-      "note_en": "Active.",
       "repo": "https://github.com/iBotPeaches/Apktool",
       "install": [
         {"method": "pkg", "packages": ["apktool"]}
@@ -1292,10 +739,9 @@
       "name": "Tmate",
       "category": "utils",
       "status": "active",
+      "source": "pkg",
       "desc_es": "Terminal remota instantánea (pair programming).",
       "desc_en": "Instant remote terminal (pair programming).",
-      "note_es": "Activa.",
-      "note_en": "Active.",
       "repo": "https://github.com/tmate-io/tmate",
       "install": [
         {"method": "pkg", "packages": ["tmate"]}
@@ -1311,11 +757,9 @@
       "name": "Speedtest-cli",
       "category": "utils",
       "status": "active",
-      "desc_es": "Mide la velocidad de conexión (libre, sivel).",
-      "desc_en": "Measures connection speed (free, sivel).",
-      "note_es": "Funciona; Ookla speedtest es más preciso.",
-      "note_en": "Works; Ookla speedtest is more accurate.",
-      "replacement": ["speedtest-ookla"],
+      "source": "pip",
+      "desc_es": "Mide la velocidad de conexión desde la terminal.",
+      "desc_en": "Measures connection speed from the terminal.",
       "repo": "https://github.com/sivel/speedtest-cli",
       "install": [
         {"method": "pip", "packages": ["speedtest-cli"]}
@@ -1327,33 +771,13 @@
       "run": {"cmd": "speedtest-cli"}
     },
     {
-      "id": "speedtest-ookla",
-      "name": "Ookla Speedtest",
-      "category": "utils",
-      "status": "active",
-      "desc_es": "CLI oficial de Ookla Speedtest.",
-      "desc_en": "Official Ookla Speedtest CLI.",
-      "note_es": "Reemplazo recomendado de speedtest-cli.",
-      "note_en": "Recommended replacement for speedtest-cli.",
-      "replacement": ["speedtest"],
-      "install": [
-        {"method": "pkg", "packages": ["speedtest-go"]}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "pkg uninstall -y speedtest-go"}
-      ],
-      "verify": {"cmd": "speedtest version"},
-      "run": {"cmd": "speedtest"}
-    },
-    {
       "id": "shodan",
       "name": "Shodan CLI",
       "category": "utils",
       "status": "api",
+      "source": "pip",
       "desc_es": "Consulta la base de datos de Shodan (requiere API key).",
       "desc_en": "Query the Shodan database (requires API key).",
-      "note_es": "Requiere SHODAN_API_KEY.",
-      "note_en": "Requires SHODAN_API_KEY.",
       "repo": "https://github.com/shodanio/shodan-python",
       "install": [
         {"method": "pip", "packages": ["shodan"]}
@@ -1368,10 +792,9 @@
       "name": "VirusTotal CLI",
       "category": "utils",
       "status": "api",
+      "source": "pip",
       "desc_es": "Consulta detecciones de VirusTotal (requiere API key).",
       "desc_en": "Query VirusTotal detections (requires API key).",
-      "note_es": "Requiere VT_API_KEY.",
-      "note_en": "Requires VT_API_KEY.",
       "repo": "https://github.com/VirusTotal/vt-cli",
       "install": [
         {"method": "pip", "packages": ["vt-cli"]}
@@ -1380,63 +803,6 @@
         {"method": "run", "cmd": "pip uninstall -y vt-cli"}
       ],
       "verify": {"cmd": "vt --version"}
-    },
-    {
-      "id": "translate",
-      "name": "Translate",
-      "category": "utils",
-      "status": "legacy",
-      "desc_es": "Traduce texto desde la terminal.",
-      "desc_en": "Translate text from the terminal.",
-      "note_es": "Obscura.",
-      "note_en": "Obscure.",
-      "repo": "https://github.com/soimort/translate-shell",
-      "install": [
-        {"method": "pkg", "packages": ["translate-shell"]}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "pkg uninstall -y translate-shell"}
-      ],
-      "verify": {"cmd": "trans -V"},
-      "run": {"cmd": "trans"}
-    },
-    {
-      "id": "qrlink",
-      "name": "QRLink",
-      "category": "utils",
-      "status": "legacy",
-      "desc_es": "Genera códigos QR.",
-      "desc_en": "Generates QR codes.",
-      "note_es": "Obscura.",
-      "note_en": "Obscure.",
-      "repo": "https://github.com/claudiodangelis/qrcp",
-      "install": [
-        {"method": "pip", "packages": ["qrcode"]}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "pip uninstall -y qrcode"}
-      ],
-      "verify": {"cmd": "python3 -c 'import qrcode'"}
-    },
-    {
-      "id": "chatgpt",
-      "name": "ChatGPT CLI",
-      "category": "utils",
-      "status": "api",
-      "desc_es": "Cliente de chat IA desde la terminal (requiere API key).",
-      "desc_en": "Terminal AI chat client (requires API key).",
-      "note_es": "Depende de la API de OpenAI; considera randi (IA local).",
-      "note_en": "Depends on OpenAI API; consider randi (local AI).",
-      "replacement": ["randi"],
-      "repo": "https://github.com/TheR1D/shell_gpt",
-      "install": [
-        {"method": "pip", "packages": ["shell-gpt"]}
-      ],
-      "remove": [
-        {"method": "run", "cmd": "pip uninstall -y shell-gpt"}
-      ],
-      "verify": {"cmd": "sgpt --help"},
-      "run": {"cmd": "sgpt"}
     }
   ]
 }

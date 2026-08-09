@@ -4,7 +4,7 @@ import sys
 
 import pytest
 
-from phistack import catalog, installer, paths, state, fractal
+from phistack import catalog, installer, paths, state, fractal, presets
 
 
 def test_fractal_banner_no_name():
@@ -14,11 +14,11 @@ def test_fractal_banner_no_name():
     assert "▀" in banner
 
 
-def test_fractal_full_set_has_interior():
+def test_fractal_full_set_has_set():
     cols, rows = 120, 60
     px = fractal.fractal_pixels(cols, rows, 80)
-    interior = sum(1 for row in px for c in row if c == fractal.INTERIOR)
-    ratio = interior / (cols * rows)
+    accent = sum(1 for row in px for c in row if c == fractal.ACCENT)
+    ratio = accent / (cols * rows)
     assert 0.05 < ratio < 0.6
 
 
@@ -28,7 +28,14 @@ def test_catalog_loads_and_validates():
 
 
 def test_catalog_min_tools():
-    assert len(catalog.list_tools()) >= 70
+    assert len(catalog.list_tools()) >= 35
+
+
+def test_vendored_tools_present():
+    for tool in catalog.list_tools():
+        if tool.get("source") == "vendor":
+            src = paths.REPO_ROOT / "lab" / "tools" / tool["id"]
+            assert src.is_dir(), f"faltan fuentes vendored de {tool['id']}"
 
 
 def test_catalog_has_categories():
@@ -126,3 +133,22 @@ def test_cli_help():
         cwd=str(paths.REPO_ROOT),
     )
     assert proc.returncode == 0
+
+
+def test_presets_listed():
+    assert "phi-dark" in presets.term_presets()
+    assert "phi" in presets.shell_presets()
+    assert "nvim-astrovim" in presets.ide_presets()
+    assert "quotes" in presets.banner_styles()
+    assert "minimal" in presets.prompt_styles()
+
+
+def test_cli_term_list():
+    proc = subprocess.run(
+        [sys.executable, "phi.py", "term", "list"],
+        capture_output=True,
+        text=True,
+        cwd=str(paths.REPO_ROOT),
+    )
+    assert proc.returncode == 0
+    assert "phi-dark" in proc.stdout

@@ -1,0 +1,23 @@
+Ejecuta `phi doctor` antes de instalar herramientas.
+;;;
+No pruebes sistemas que no te pertenecen ni sin permiso explícito.
+;;;
+Usa `phi remove <tool> -y` para desinstalar sin confirmación.
+;;;
+Haz `phi update` periódicamente para estar al día.
+;;;
+El banner del conjunto de Mandelbrot se genera en tiempo real: phi --banner.
+;;;
+Guarda tu configuración como preset: phi term save <nombre>.
+;;;
+Antes de cambiar tu IDE haz `phi ide backup`.
+;;;
+Las descargas del catálogo soportan verificación SHA256.
+;;;
+Mantén tu Termux actualizado desde F-Droid, no desde Google Play.
+;;;
+Usa wordlists propias con cupp y crunch para tus pruebas.
+;;;
+El estado de cada herramienta está en phi info <tool>.
+;;;
+Contribuye: cualquier preset o herramienta funcional es bienvenida.

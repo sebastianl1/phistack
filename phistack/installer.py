@@ -36,6 +36,15 @@ def run(cmd, cwd=None):
 
 def run_step(step):
     method = step.get("method")
+    if method == "vendor":
+        name = step["name"]
+        src = paths.REPO_ROOT / "lab" / "tools" / name
+        dest = paths.OPT / name
+        if not src.exists():
+            return False
+        shutil.rmtree(dest, ignore_errors=True)
+        shutil.copytree(src, dest)
+        return True
     if method == "pkg":
         packages = " ".join(step["packages"])
         return run(f"pkg install -y {packages}")

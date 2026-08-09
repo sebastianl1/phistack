@@ -79,7 +79,7 @@ def category_ids():
 def validate():
     data = load_catalog()
     errors = []
-    allowed_methods = {"pkg", "git", "pip", "run", "download", "launcher"}
+    allowed_methods = {"pkg", "git", "pip", "run", "download", "launcher", "vendor"}
     for tool in data.get("tools", []):
         tool_id = tool.get("id")
         if tool.get("category") not in data.get("categories", {}):

@@ -1,0 +1,47 @@
+"La seguridad no es un producto, sino un proceso."
+— Bruce Schneier
+;;;
+"Si crees que la tecnología puede resolver tus problemas de seguridad, entonces no entiendes ni los problemas ni la tecnología."
+— Bruce Schneier
+;;;
+"El único sistema verdaderamente seguro es aquel que está apagado, desconectado y enterrado en hormigón."
+— Gene Spafford
+;;;
+"La ciberseguridad es la mayor de las aventuras: un campo de batalla invisible."
+— Anónimo
+;;;
+"En el mundo de la seguridad, el mayor riesgo eres tú mismo."
+— Kevin Mitnick
+;;;
+"Amateurs hack systems, professionals hack people."
+— Bruce Schneier
+;;;
+"El hacking es como la natación: se aprende observando y practicando."
+— Anónimo
+;;;
+"Con gran poder viene gran responsabilidad."
+— Voltaire / Spider-Man
+;;;
+"Primero conoce tu propio sistema; luego conoce al enemigo."
+— Anónimo
+;;;
+"No es la herramienta la que hace al hacker, es el conocimiento."
+— Anónimo
+;;;
+"La mejor manera de predecir el futuro es inventarlo."
+— Alan Kay
+;;;
+"El software nunca está terminado, solo se abandona."
+— Anónimo
+;;;
+"En la terminal se encuentra el poder."
+— Comunidad Termux
+;;;
+"Documéntalo. Si no está documentado, no existe."
+— Regla de oro del desarrollo
+;;;
+"Cada línea de código es una oportunidad de aprender."
+— Anónimo
+;;;
+"La privacidad no es un lujo, es un derecho."
+— Comunidad de seguridad

@@ -1,14 +1,14 @@
 # PhiStack para Termux
 
-> Gestor de stack para Termux (bilingüe ES/EN). Catálogo declarativo de 72
-> herramientas de ciberseguridad con menús interactivos (InquirerPy) y análisis
-> de obsolescencia. Uso autorizado únicamente.
+> Laboratorio Termux: estructura tu terminal de Android para desarrollo de
+> software y ciberseguridad. Catálogo curado de 41 herramientas funcionales
+> (código vendorizado), presets de terminal e IDE. Bilingüe ES/EN. Uso autorizado.
 
 ## Instalación
 
 - [README (instalación y comandos)](https://github.com/sebastianl1/phistack#readme)
-- [Landing page](https://sebastianl1.github.io/phistack/): características, instalación, FAQ en 6 idiomas
-- [Informe de obsolescencia](https://sebastianl1.github.io/phistack/ANALISIS_TOOLS.md): herramientas activas / legacy / obsoletas
+- [Landing page](https://sebastianl1.github.io/phistack/): características, laboratorio, catálogo y FAQ en 6 idiomas
+- [Informe de análisis](https://sebastianl1.github.io/phistack/ANALISIS_TOOLS.md)
 
 Instalación rápida en Termux:
 
@@ -23,40 +23,42 @@ bash install.sh
 ## Uso
 
 - `phi` — menú interactivo
-- `phi list [categoria]` — listar herramientas
-- `phi install <tool>` — instalar
-- `phi remove <tool> [-y]` — eliminar
-- `phi info <tool>` — información y reemplazo sugerido
-- `phi doctor` — diagnóstico del entorno
-- `phi theme` — banner / prompt
-- `phi lang <es|en>` — idioma
-- `phi update` / `phi uninstall`
+- `phi list [categoria]` — listar herramientas (agrupadas, con estado y fuente)
+- `phi install <tool>` / `phi remove <tool> [-y]` / `phi info <tool>`
+- `phi term set <preset>` — aplicar preset de terminal (banner, prompt, colores, fuente)
+- `phi term banner <phi|quotes|tips|minimal>` — banner de inicio
+- `phi ide install nvim-astrovim` — instalar IDE
+- `phi doctor`, `phi lang <es|en>`, `phi update`, `phi uninstall`
 
-## Catálogo
+## Catálogo (41 herramientas, 9 categorías)
 
-Fuente de verdad: `catalog/tools.json` (72 herramientas, 9 categorías).
+- OSINT: sherlock, theHarvester, holehe, h8mail, nexfil, ProtoSINT, PwnedOrNot, Octosuite, PhoneInfoga, Instaloader, Subfinder
+- Escaneo: nmap, gobuster, ffuf, nikto, whatweb, sublist3r, arjun, nuclei
+- Web: sqlmap, XSStrike, Photon, SlowLoris
+- Explotación: metasploit
+- Contraseñas: hydra, john, hashcat, crunch, cupp, HashID
+- Phishing: zphisher, Seeker, GoPhish
+- Red: netcat
+- Forense: exiftool, Metagoofil, APKTool
+- Utilidades: tmate, speedtest-cli, Shodan (API), VirusTotal CLI (API)
 
-- OSINT: sherlock, theHarvester, holehe, h8mail, phoneinfoga, subfinder, instaloader…
-- Escaneo: nmap (+vulscan), gobuster, ffuf, nikto, whatweb, httpx, nuclei…
-- Web: sqlmap, xsstrike, photon, beef-xss…
-- Explotación: metasploit…
-- Contraseñas: hydra, john, crunch, cupp…
-- Phishing: zphisher, seeker, gophish…
-- Forense: exiftool, metagoofil, apktool…
-- Utilidades: tmate, speedtest, shodan (API), virustotal (API)…
+Origen de cada herramienta: `vendor` (código en `lab/tools/`, sin depender de
+terceros), `pkg` (repositorios de Termux), `pip` (PyPI), `download` (binario de
+release). Cada herramienta vendorizada conserva su propia licencia.
 
-Estados: active (mantenida) / legacy (funcional sin mantenimiento) / obsolete
-(archivada, con reemplazo sugerido) / api (requiere key) / local.
+## Laboratorio
+
+- **Terminal**: presets de banner aleatorio (phi/quotes/tips/minimal), prompt de fish (phi/minimal), colores y fuente. Guarda tu config con `phi term save <nombre>`.
+- **IDE**: nvim con AstroVim (config vendorizada) y variantes. `phi ide list|install|edit|backup`.
 
 ## Seguridad
 
 - Uso autorizado únicamente. No pruebes sistemas ajenos sin permiso explícito.
-- Descargas directas con soporte de SHA256. Sin `curl | bash` ciego.
-- `phi doctor` valida el entorno antes de instalar.
+- Sin `curl | bash` ciego. Código de las herramientas dentro del repositorio.
 
 ## Enlaces
 
 - Repositorio: https://github.com/sebastianl1/phistack
 - Landing: https://sebastianl1.github.io/phistack/
 - Familia Phi: OsintPhi, TorPhi, Lamdaphi
-- Licencia: MIT
+- Licencia: MIT (PhiStack) + licencias propias de cada herramienta vendored

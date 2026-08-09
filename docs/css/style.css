@@ -193,6 +193,26 @@ section.alt { background: linear-gradient(180deg, var(--bg), #0d1017); }
 .cat-note { text-align: center; color: var(--muted); font-size: .92rem; margin-top: 22px; }
 .cat-note a { color: #c4b5fd; }
 
+/* Listado de herramientas (SEO estático) */
+.cat-title { color: #fff; font-size: 1.05rem; font-weight: 700; margin: 34px 0 16px; padding-left: 12px; border-left: 3px solid var(--purple); }
+.tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.tool-card {
+  position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px 14px 20px; transition: border-color .2s, transform .2s;
+}
+.tool-card:hover { border-color: rgba(139,92,246,.5); transform: translateY(-2px); }
+.tool-status {
+  position: absolute; left: 0; top: 14px; bottom: 14px; width: 4px; border-radius: 4px; background: var(--purple);
+}
+.tool-status.active { background: var(--green); }
+.tool-status.api { background: var(--pink); }
+.tool-name { display: block; color: #fff; font-weight: 700; font-size: .95rem; margin-bottom: 4px; }
+.tool-desc { display: block; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+.tool-id {
+  display: inline-block; margin-top: 8px; font-size: .72rem; color: #c4b5fd;
+  background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.25); padding: 2px 8px; border-radius: 6px;
+}
+
 /* FAQ */
 .faq { max-width: 760px; margin: 0 auto; }
 .faq-item { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; background: var(--card); }

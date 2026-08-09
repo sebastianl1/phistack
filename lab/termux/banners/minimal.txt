@@ -1,0 +1,7 @@
+φ Termux
+;;;
+[PhiStack] Termux
+;;;
+φ :: {hostname}
+;;;
+Termux ready
