@@ -454,5 +454,53 @@
     "# Terminal / IDE (laboratoire)",
     "# Terminal / IDE (Lab)",
     "# 终端 / IDE（实验室）"
+  ],
+  "catalogo.all": [
+    "Todas",
+    "All",
+    "Todas",
+    "Tous",
+    "Alle",
+    "全部"
+  ],
+  "catalogo.search": [
+    "Buscar herramienta…",
+    "Search tools…",
+    "Buscar ferramentas…",
+    "Rechercher…",
+    "Werkzeuge suchen…",
+    "搜索工具…"
+  ],
+  "catalogo.col_tool": [
+    "Herramienta",
+    "Tool",
+    "Ferramenta",
+    "Outil",
+    "Werkzeug",
+    "工具"
+  ],
+  "catalogo.col_cat": [
+    "Categoría",
+    "Category",
+    "Categoria",
+    "Catégorie",
+    "Kategorie",
+    "类别"
+  ],
+  "catalogo.col_desc": [
+    "Descripción",
+    "Description",
+    "Descrição",
+    "Description",
+    "Beschreibung",
+    "描述"
+  ],
+  "catalogo.col_id": [
+    "ID",
+    "ID",
+    "ID",
+    "ID",
+    "ID",
+    "ID"
   ]
 }

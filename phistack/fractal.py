@@ -1,20 +1,30 @@
+import math
 import struct
 import zlib
 
-ACCENT = (34, 211, 238)
-BG = (7, 10, 18)
+PALETTE = [
+    (16, 4, 6),
+    (70, 8, 18),
+    (178, 16, 52),
+    (255, 45, 85),
+    (255, 120, 140),
+    (255, 214, 220),
+]
+
+INTERIOR = (10, 3, 4)
 
 VIEWS = {
-    "small": {"cols": 58, "rows": 16, "max_iter": 90},
-    "medium": {"cols": 86, "rows": 22, "max_iter": 110},
-    "large": {"cols": 112, "rows": 30, "max_iter": 130},
+    "small": {"cols": 58, "rows": 16, "max_iter": 100},
+    "medium": {"cols": 88, "rows": 24, "max_iter": 140},
+    "large": {"cols": 116, "rows": 32, "max_iter": 180},
 }
 
 VIEW_CENTER = (-0.7, 0.0)
 VIEW_WIDTH = 3.0
+SUPERSAMPLE = 4
 
 
-def _in_set(cre, cim, max_iter, bail=4.0):
+def _smooth(cre, cim, max_iter, bail=4.0):
     x = 0.0
     y = 0.0
     x2 = 0.0
@@ -26,7 +36,23 @@ def _in_set(cre, cim, max_iter, bail=4.0):
         x2 = x * x
         y2 = y * y
         i += 1
-    return i >= max_iter
+    if i >= max_iter:
+        return None
+    log_zn = math.log(x2 + y2) / 2.0
+    nu = math.log(log_zn / math.log(2.0)) / math.log(2.0)
+    return (i + 1 - nu) / max_iter
+
+
+def _lerp(a, b, t):
+    return tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
+
+
+def _color(t):
+    t = max(0.0, min(1.0, t))
+    scaled = t * (len(PALETTE) - 1)
+    idx = min(int(scaled), len(PALETTE) - 2)
+    frac = scaled - idx
+    return _lerp(PALETTE[idx], PALETTE[idx + 1], frac)
 
 
 def fractal_pixels(cols, rows, max_iter, view_center=None, view_width=None):
@@ -41,13 +67,41 @@ def fractal_pixels(cols, rows, max_iter, view_center=None, view_width=None):
     ymin = cy - height / 2
     ymax = cy + height / 2
 
+    ss = SUPERSAMPLE
     pixels = []
     for py in range(rows):
-        cim = ymax - (py + 0.5) / rows * (ymax - ymin)
         row = []
         for px in range(cols):
-            cre = xmin + (px + 0.5) / cols * (xmax - xmin)
-            row.append(ACCENT if _in_set(cre, cim, max_iter) else BG)
+            acc = [0, 0, 0]
+            inside = 0
+            for sy in range(ss):
+                fy = (py + (sy + 0.5) / ss) / rows
+                cim = ymax - fy * (ymax - ymin)
+                for sx in range(ss):
+                    fx = (px + (sx + 0.5) / ss) / cols
+                    cre = xmin + fx * (xmax - xmin)
+                    t = _smooth(cre, cim, max_iter)
+                    if t is None:
+                        inside += 1
+                        continue
+                    c = _color(t)
+                    acc[0] += c[0]
+                    acc[1] += c[1]
+                    acc[2] += c[2]
+            total = ss * ss
+            if inside == total:
+                row.append(INTERIOR)
+            elif inside > 0:
+                n = total - inside
+                row.append(
+                    (
+                        (acc[0] + INTERIOR[0] * inside) // total,
+                        (acc[1] + INTERIOR[1] * inside) // total,
+                        (acc[2] + INTERIOR[2] * inside) // total,
+                    )
+                )
+            else:
+                row.append((acc[0] // total, acc[1] // total, acc[2] // total))
         pixels.append(row)
     return pixels
 
@@ -71,15 +125,17 @@ def render_halfblock(pixels, cols, rows):
 
 
 def render_ascii(pixels, cols, rows):
+    ramp = " .:-=+*#%@"
     lines = []
     for r in range(rows):
         line = []
         for c in range(cols):
             top = pixels[2 * r][c]
             bot = pixels[2 * r + 1][c]
-            lit_top = 1 if top == ACCENT else 0
-            lit_bot = 1 if bot == ACCENT else 0
-            line.append("#" if lit_top + lit_bot >= 1 else " ")
+            lum_top = 0.299 * top[0] + 0.587 * top[1] + 0.114 * top[2]
+            lum_bot = 0.299 * bot[0] + 0.587 * bot[1] + 0.114 * bot[2]
+            lum = (lum_top + lum_bot) / 2 / 255
+            line.append(ramp[int(lum * (len(ramp) - 1))])
         lines.append("".join(line))
     return "\n".join(lines)
 

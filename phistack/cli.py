@@ -47,14 +47,12 @@ def _installed_mark(tool):
     return ""
 
 
-def _print_tool_table(tools, group=True):
+def _print_tool_table(tools, group=False, show_desc=False):
     if group:
-        seen = False
         for cat in catalog.category_ids():
             rows = [x for x in tools if x.get("category") == cat]
             if not rows:
                 continue
-            seen = True
             table = Table(title=f"[bold]{category_name(cat)}[/]", box=None, pad_edge=False)
             table.add_column(t("status"), no_wrap=True)
             table.add_column(t("tool_id"))
@@ -69,22 +67,36 @@ def _print_tool_table(tools, group=True):
                 )
             console.print(table)
             console.print()
-        if not seen:
-            console.print(f"[yellow]{t('no_results', q='')}[/]")
-    else:
-        table = Table(box=None, pad_edge=False)
-        table.add_column(t("status"), no_wrap=True)
-        table.add_column(t("category"))
-        table.add_column(t("tool_id"))
-        table.add_column(t("tool_name"))
-        for tool in tools:
-            table.add_row(
-                f"{STATUS_ICON.get(tool.get('status'), '●')} {status_name(tool.get('status'))}",
-                category_name(tool.get("category")),
-                tool["id"],
-                tool.get("name", tool["id"]) + _installed_mark(tool),
-            )
-        console.print(table)
+        return
+    lang = load_lang()
+    table = Table(box=None, pad_edge=False, show_header=True, header_style="bold")
+    table.add_column(t("tool_id"), no_wrap=True, style="bold")
+    table.add_column(t("tool_name"))
+    table.add_column(t("category"), no_wrap=True)
+    table.add_column(t("status"), no_wrap=True)
+    table.add_column(t("source"), no_wrap=True)
+    if show_desc:
+        table.add_column(t("description"))
+    cat_order = catalog.category_ids()
+    ordered = sorted(
+        tools,
+        key=lambda x: (
+            cat_order.index(x.get("category")) if x.get("category") in cat_order else 99,
+            x.get("name", x["id"]),
+        ),
+    )
+    for tool in ordered:
+        row = [
+            tool["id"],
+            tool.get("name", tool["id"]) + _installed_mark(tool),
+            category_name(tool.get("category")),
+            f"{STATUS_ICON.get(tool.get('status'), '●')} {status_name(tool.get('status'))}",
+            tool.get("source", ""),
+        ]
+        if show_desc:
+            row.append(tool.get("desc_" + lang, tool.get("desc_en", "")))
+        table.add_row(*row)
+    console.print(table)
 
 
 def cmd_list(args):
@@ -100,11 +112,10 @@ def cmd_list(args):
         for tool in tools:
             cmd_info(types.SimpleNamespace(tool=tool["id"]))
         return
-    _print_tool_table(tools, group=True)
+    show_desc = bool(args.category and args.category != "*")
+    _print_tool_table(tools, group=args.group, show_desc=show_desc)
     cats = len({x.get("category") for x in tools})
-    console.print(
-        f"[dim]{t('list.tools_count', n=len(tools), c=cats)}[/]"
-    )
+    console.print(f"[dim]{t('list.tools_count', n=len(tools), c=cats)}[/]")
 
 
 def cmd_search(args):
@@ -112,7 +123,7 @@ def cmd_search(args):
     if not results:
         console.print(f"[yellow]{t('no_results', q=args.query)}[/]")
         return
-    _print_tool_table(results, group=True)
+    _print_tool_table(results, group=False)
     console.print(f"[dim]{t('list.tools_count', n=len(results), c=len({x.get('category') for x in results}))}[/]")
 
 
@@ -317,7 +328,10 @@ def _pick_tool(tools, message_key="select_tool"):
         )
         for tool in tools
     ]
-    choice = menus.select(t(message_key), choices)
+    if len(tools) > 12:
+        choice = menus.fuzzy_select(t(message_key), choices)
+    else:
+        choice = menus.select(t(message_key), choices)
     return next((x for x in tools if x["id"] == choice), None)
 
 
@@ -485,7 +499,7 @@ def interactive():
             if picked:
                 cmd_remove(types.SimpleNamespace(tools=[picked["id"]], interactive=False, yes=False))
         elif choice == "list":
-            cmd_list(types.SimpleNamespace(category="*", status=None, installed=False, source=None, detail=False))
+            cmd_list(types.SimpleNamespace(category="*", status=None, installed=False, source=None, detail=False, group=False))
         elif choice == "search":
             query = menus.text(t("search_query"))
             cmd_search(types.SimpleNamespace(query=query))
@@ -580,6 +594,7 @@ def main():
     p_list.add_argument("--status", default=None)
     p_list.add_argument("--installed", action="store_true")
     p_list.add_argument("--source", default=None, choices=["vendor", "pkg", "pip", "download"])
+    p_list.add_argument("--group", action="store_true", help="Agrupar por categoría / Group by category")
     p_list.add_argument("--detail", action="store_true")
     p_list.set_defaults(func=cmd_list)
 

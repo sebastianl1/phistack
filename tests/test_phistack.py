@@ -17,9 +17,11 @@ def test_fractal_banner_no_name():
 def test_fractal_full_set_has_set():
     cols, rows = 120, 60
     px = fractal.fractal_pixels(cols, rows, 80)
-    accent = sum(1 for row in px for c in row if c == fractal.ACCENT)
-    ratio = accent / (cols * rows)
+    interior = sum(1 for row in px for c in row if c == fractal.INTERIOR)
+    ratio = interior / (cols * rows)
     assert 0.05 < ratio < 0.6
+    colors = {c for row in px for c in row}
+    assert len(colors) > 50
 
 
 def test_catalog_loads_and_validates():

@@ -115,5 +115,11 @@ window.I18N = {
   "lab.term_d": "随机启动横幅、fish 提示符、颜色和字体。使用 <code>phi term</code> 选择或保存你自己的配置。",
   "lab.ide_t": "IDE 预设",
   "lab.ide_d": "nvim 搭配 AstroVim 及变体。使用 <code>phi ide</code> 安装、编辑和备份。",
-  "uso.c7": "# 终端 / IDE（实验室）"
+  "uso.c7": "# 终端 / IDE（实验室）",
+  "catalogo.all": "全部",
+  "catalogo.search": "搜索工具…",
+  "catalogo.col_tool": "工具",
+  "catalogo.col_cat": "类别",
+  "catalogo.col_desc": "描述",
+  "catalogo.col_id": "ID"
 };

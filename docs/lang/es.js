@@ -115,5 +115,11 @@ window.I18N = {
   "lab.term_d": "Banner aleatorio de inicio, prompt de fish, colores y fuente. Elige o guarda tu propia config con <code>phi term</code>.",
   "lab.ide_t": "Presets de IDE",
   "lab.ide_d": "nvim con AstroVim y variantes. Instala, edita y respalda con <code>phi ide</code>.",
-  "uso.c7": "# Terminal / IDE (laboratorio)"
+  "uso.c7": "# Terminal / IDE (laboratorio)",
+  "catalogo.all": "Todas",
+  "catalogo.search": "Buscar herramienta…",
+  "catalogo.col_tool": "Herramienta",
+  "catalogo.col_cat": "Categoría",
+  "catalogo.col_desc": "Descripción",
+  "catalogo.col_id": "ID"
 };

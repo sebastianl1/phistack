@@ -2,6 +2,18 @@
 
 Todas las notas de versiones de PhiStack. Sigue [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [2.0.1] - 2026-08-09
+
+### Security
+- Eliminado `lab/tools/zphisher/.sites/origin/analytics.js` (contenía una API key pública de Google AMP incrustada en el `analytics.js` de terceros). Resuelve la alerta de secretos de GitHub.
+
+### Changed
+- **Banner de terminal**: conjunto de Mandelbrot completo con **gradiente suave rojo** (supersampling 4×, bordes limpios, interior oscuro). La imagen del banner de la página web (`og-image.png`) se mantiene intacta.
+- **Paleta web a rojos**: `docs/css/style.css` (`--purple`/`--pink`/`--cyan` → rojos; gradiente rojo).
+- **`phi list`**: una sola tabla compacta (`ID | Herramienta | Categoría | Estado | Fuente`) ordenada por categoría; `--group` conserva la vista agrupada; `phi list <categoria>` añade descripción.
+- **Menú interactivo**: búsqueda difusa (fuzzy) al elegir herramientas cuando hay más de 12.
+- **Catálogo web**: tabla filtrable (tabs por categoría + buscador) con las 41 herramientas en HTML estático (SEO); se reemplazó la cuadrícula de tarjetas.
+
 ## [2.0.0] - 2026-08-09
 
 ### Added

@@ -5,12 +5,15 @@ from . import paths, fractal
 from .lang import t
 
 BANNER_SIZES = ("small", "medium", "large")
+_banner_cache = {}
 
 
 def render_banner(size="small"):
     if size not in BANNER_SIZES:
         size = "small"
-    return fractal.build(size)
+    if size not in _banner_cache:
+        _banner_cache[size] = fractal.build(size)
+    return _banner_cache[size]
 
 
 def set_banner(size):
