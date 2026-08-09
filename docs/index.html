@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO básico -->
+  <title>PhiStack en Termux — Tu arsenal de seguridad con menús interactivos</title>
+  <meta name="description" content="Gestiona 72 herramientas de ciberseguridad en Termux con catálogo declarativo, menús interactivos (InquirerPy) y análisis de obsolescencia. Bilingüe ES/EN.">
+  <meta name="keywords" content="phistack termux, gestor de stack termux, herramientas de seguridad android, termux hacking tools, osintphi, torphi, lamdaphi, inquirerpy termux, arsenal termux">
+  <meta name="author" content="Sebastian Laguna">
+  <meta name="robots" content="index, follow">
+  <meta name="revisit-after" content="7 days">
+  <meta name="language" content="Spanish">
+  <meta name="distribution" content="global">
+  <meta name="rating" content="general">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="canonical" href="https://sebastianl1.github.io/phistack/">
+
+  <!-- Hreflang (idiomas) -->
+  <link rel="alternate" hreflang="es" href="https://sebastianl1.github.io/phistack/">
+  <link rel="alternate" hreflang="en" href="https://sebastianl1.github.io/phistack/?lang=en">
+  <link rel="alternate" hreflang="pt" href="https://sebastianl1.github.io/phistack/?lang=pt">
+  <link rel="alternate" hreflang="fr" href="https://sebastianl1.github.io/phistack/?lang=fr">
+  <link rel="alternate" hreflang="de" href="https://sebastianl1.github.io/phistack/?lang=de">
+  <link rel="alternate" hreflang="zh" href="https://sebastianl1.github.io/phistack/?lang=zh">
+  <link rel="alternate" hreflang="x-default" href="https://sebastianl1.github.io/phistack/">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230b0d12%22/><text x=%2250%22 y=%2272%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22%23a78bfa%22 font-family=%22Georgia,serif%22>Φ</text></svg>">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sebastianl1.github.io/phistack/">
+  <meta property="og:title" content="PhiStack en Termux — Tu arsenal de seguridad con menús interactivos">
+  <meta property="og:description" content="Gestiona 72 herramientas de ciberseguridad en Termux con catálogo declarativo, menús interactivos (InquirerPy) y análisis de obsolescencia. Bilingüe ES/EN.">
+  <meta property="og:image" content="https://sebastianl1.github.io/phistack/imagenes/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Fractal del conjunto de Mandelbrot — banner de PhiStack">
+  <meta property="og:site_name" content="PhiStack - Termux">
+  <meta property="og:locale" content="es_ES">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@sebastianl1">
+  <meta name="twitter:creator" content="@sebastianl1">
+  <meta name="twitter:title" content="PhiStack en Termux — Tu arsenal de seguridad con menús interactivos">
+  <meta name="twitter:description" content="Gestiona 72 herramientas de ciberseguridad en Termux con menús interactivos y análisis de obsolescencia.">
+  <meta name="twitter:image" content="https://sebastianl1.github.io/phistack/imagenes/og-image.png">
+  <meta name="twitter:image:alt" content="Fractal del conjunto de Mandelbrot — banner de PhiStack">
+
+  <!-- JSON-LD: SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PhiStack - Termux",
+    "operatingSystem": "Android (Termux)",
+    "applicationCategory": "DeveloperApplication",
+    "applicationSubCategory": "Security Toolkit Manager",
+    "description": "Gestor de stack para Termux: catálogo declarativo de 72 herramientas de ciberseguridad con menús interactivos y análisis de obsolescencia.",
+    "author": { "@type": "Person", "name": "Sebastian Laguna" },
+    "license": "https://opensource.org/licenses/MIT",
+    "url": "https://github.com/sebastianl1/phistack",
+    "softwareVersion": "1.0.0",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": "Catálogo declarativo JSON, menús interactivos InquirerPy, análisis de obsolescencia, bilingüe ES/EN, phi doctor, tema Termux"
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Qué es PhiStack?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PhiStack es un gestor de stack para Termux: instala, elimina y analiza herramientas de ciberseguridad desde un catálogo declarativo con menús interactivos." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Necesito root o proot?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. PhiStack usa los repositorios de Termux (pkg), Python, git y binarios de proyectos open source. Nada de root." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Por qué debo instalar Termux desde F-Droid?",
+        "acceptedAnswer": { "@type": "Answer", "text": "La versión de Google Play está desactualizada y abandonada. La oficial se mantiene en F-Droid (https://f-droid.org/packages/com.termux/)." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo añado mi propio stack?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Añade una entrada en catalog/tools.json (id, categoría, estado, pasos de instalación y verificación). El catálogo valida tu entrada automáticamente." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué significa el estado de una herramienta?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Activa (mantenida), legacy (funcional sin mantenimiento), obsoleta (archivada, con reemplazo sugerido), API (requiere key) o local." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo actualizo PhiStack?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Ejecuta phi update (hace un git pull y refresca dependencias) o bash update.sh." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo desinstalo PhiStack?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Ejecuta phi uninstall (borra binarios y configuración) o bash uninstall.sh." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Por qué Python?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Catálogo JSON + InquirerPy (menús profesionales) + rich (tablas y estados). 100% compatible con Termux." }
+      }
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://sebastianl1.github.io/phistack/" },
+      { "@type": "ListItem", "position": 2, "name": "PhiStack en Termux", "item": "https://sebastianl1.github.io/phistack/" }
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD: WebSite + Person -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PhiStack - Termux",
+    "url": "https://sebastianl1.github.io/phistack/",
+    "inLanguage": "es",
+    "author": { "@type": "Person", "name": "Sebastian Laguna", "url": "https://github.com/sebastianl1" }
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/></svg>
+        PhiStack <span class="grad" style="-webkit-text-fill-color:initial">· Termux</span>
+      </a>
+      <div class="nav-links">
+        <a href="#funciona" data-i18n="nav.how">Cómo funciona</a>
+        <a href="#caracteristicas" data-i18n="nav.features">Características</a>
+        <a href="#instalacion" data-i18n="nav.install">Instalación</a>
+        <a href="#uso" data-i18n="nav.usage">Uso</a>
+        <a href="#catalogo" data-i18n="nav.catalog">Catálogo</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        <div class="lang-wrap" id="langWrap">
+          <button type="button" class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Idioma / Language">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="lang-label" id="langLabel">Español</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <ul class="lang-menu" id="langMenu" role="listbox" aria-label="Idiomas">
+            <li><a role="option" aria-selected="true" data-lang="es" href="?lang=es"><span class="check">✓ </span>Español</a></li>
+            <li><a role="option" aria-selected="false" data-lang="en" href="?lang=en"><span class="check">✓ </span>English</a></li>
+            <li><a role="option" aria-selected="false" data-lang="pt" href="?lang=pt"><span class="check">✓ </span>Português</a></li>
+            <li><a role="option" aria-selected="false" data-lang="fr" href="?lang=fr"><span class="check">✓ </span>Français</a></li>
+            <li><a role="option" aria-selected="false" data-lang="de" href="?lang=de"><span class="check">✓ </span>Deutsch</a></li>
+            <li><a role="option" aria-selected="false" data-lang="zh" href="?lang=zh"><span class="check">✓ </span>中文</a></li>
+          </ul>
+        </div>
+        <a class="btn small" href="https://github.com/sebastianl1/phistack" rel="noopener" data-i18n="nav.github">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="badge-row">
+        <span class="pill">v1.0.0</span>
+        <span class="pill green" data-i18n="hero.badge_tools">72 herramientas</span>
+        <span class="pill" data-i18n="hero.badge_lang">ES/EN</span>
+        <span class="pill">MIT</span>
+      </div>
+      <h1>PhiStack <span class="grad" data-i18n="hero.title_span">en Termux</span></h1>
+      <p class="tagline" data-i18n="hero.tagline">Gestiona 72 herramientas de ciberseguridad con menús interactivos, un catálogo declarativo y análisis de obsolescencia. Bilingüe ES/EN y listo para tu propio stack.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#instalacion" data-i18n="hero.cta_install">Instalar ahora</a>
+        <a class="btn ghost" href="https://github.com/sebastianl1/phistack" rel="noopener" data-i18n="hero.cta_github">Ver en GitHub</a>
+      </div>
+      <p class="hero-meta"><span data-i18n="hero.meta_pre">Open Source · Licencia MIT · Por </span><a href="https://sebastianl1.github.io/Portafolio/" rel="noopener">Sebastian Laguna</a></p>
+
+      <div class="term-wrap">
+        <div class="term">
+          <div class="term-bar">
+            <span class="term-dot" style="background:#ff5f57"></span>
+            <span class="term-dot" style="background:#febc2e"></span>
+            <span class="term-dot" style="background:#28c840"></span>
+            <span class="title">Termux — phi</span>
+          </div>
+          <div class="term-body"><img src="imagenes/og-image.png" alt="Fractal del conjunto de Mandelbrot — banner de PhiStack en Termux"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="wrap reveal">
+      <div class="stats">
+        <div class="stat"><b>72</b><span data-i18n="stat.tools">Herramientas</span></div>
+        <div class="stat"><b>9</b><span data-i18n="stat.categories">Categorías</span></div>
+        <div class="stat"><b>6</b><span data-i18n="stat.langs">Idiomas</span></div>
+        <div class="stat"><b>MIT</b><span data-i18n="stat.oss">Open Source</span></div>
+      </div>
+    </div>
+
+    <!-- Cómo funciona -->
+    <section id="funciona" class="alt">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="sec-eyebrow" data-i18n="funcion.eyebrow">Cómo funciona</div>
+          <h2 data-i18n="funcion.title">Del terminal a tu arsenal en 3 pasos</h2>
+          <p data-i18n="funcion.sub">PhiStack combina un catálogo declarativo, un motor de instalación con verificación y menús interactivos modernos.</p>
+        </div>
+        <div class="steps">
+          <div class="step reveal"><h3 data-i18n="funcion.step1_t">Catálogo declarativo</h3><p data-i18n="funcion.step1_d"><code>catalog/tools.json</code> describe 72 herramientas con estado, descripción, instalación y verificación. Sin cadenas de <code>if/elif</code>.</p></div>
+          <div class="step reveal"><h3 data-i18n="funcion.step2_t">Motor con verificación</h3><p data-i18n="funcion.step2_d">Instala con <code>pkg</code>, <code>git</code>, <code>pip</code> o descargas con SHA256, y comprueba que cada herramienta quedó operativa.</p></div>
+          <div class="step reveal"><h3 data-i18n="funcion.step3_t">Menús interactivos</h3><p data-i18n="funcion.step3_d">Selección, búsqueda difusa y multi-instalación con InquirerPy. Modo CLI y modo interactivo.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Características -->
+    <section id="caracteristicas">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="sec-eyebrow" data-i18n="feat.eyebrow">Características</div>
+          <h2 data-i18n="feat.title">Hecho para Termux, listo para ti</h2>
+          <p data-i18n="feat.sub">Todo lo que necesitas para montar y mantener tu arsenal de seguridad en Android.</p>
+        </div>
+        <div class="feat-grid">
+          <div class="feat reveal">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg></div>
+            <div><h3 data-i18n="feat1_t">Catálogo declarativo</h3><p data-i18n="feat1_d">JSON puro, fácil de extender con tu propio stack (OsintPhi, TorPhi, Lamdaphi…).</p></div>
+          </div>
+          <div class="feat reveal">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+            <div><h3 data-i18n="feat2_t">Análisis de obsolescencia</h3><p data-i18n="feat2_d">Cada herramienta marcada activa/legacy/obsoleta, con reemplazos modernos sugeridos.</p></div>
+          </div>
+          <div class="feat reveal">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+            <div><h3 data-i18n="feat3_t">Bilingüe ES/EN</h3><p data-i18n="feat3_d">Interfaz y documentación en dos idiomas con selector persistente.</p></div>
+          </div>
+          <div class="feat reveal">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></div>
+            <div><h3 data-i18n="feat4_t">Menús interactivos</h3><p data-i18n="feat4_d">Select, búsqueda difusa y checkbox multi-instalación con InquirerPy.</p></div>
+          </div>
+          <div class="feat reveal">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div><h3 data-i18n="feat5_t">phi doctor</h3><p data-i18n="feat5_d">Diagnostica Python, pip, git, pkg y dependencias antes de instalar.</p></div>
+          </div>
+          <div class="feat reveal">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/></svg></div>
+            <div><h3 data-i18n="feat6_t">Tema Termux</h3><p data-i18n="feat6_d">Banner fractal espiral áurea, prompt de fish y paleta de colores propia.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Instalación -->
+    <section id="instalacion" class="alt">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="sec-eyebrow" data-i18n="install.eyebrow">Instalación</div>
+          <h2 data-i18n="install.title">Listo en menos de 2 minutos</h2>
+          <p data-i18n="install.sub">Elige tu nivel y copia el bloque de comandos.</p>
+        </div>
+
+        <div class="tabs reveal">
+          <button class="tab active" data-tab="nuevo" data-i18n="install.tab_nuevo">Nuevo en Termux</button>
+          <button class="tab" data-tab="experto" data-i18n="install.tab_experto">Ya uso Termux</button>
+        </div>
+
+        <div class="tab-pane active" id="pane-nuevo">
+          <div class="term-code reveal">
+            <pre><code><span class="cm" data-i18n="install.nuevo.c1"># 1. Actualizar e instalar dependencias</span>
+<span class="cmd">pkg update</span> <span class="cmd">&&</span> <span class="cmd">pkg upgrade</span> -y
+<span class="cmd">pkg install</span> git -y
+
+<span class="cm" data-i18n="install.nuevo.c2"># 2. Clonar e instalar</span>
+<span class="cmd">git clone</span> https://github.com/sebastianl1/phistack.git
+<span class="cmd">cd</span> phistack
+<span class="cmd">bash</span> install.sh</code></pre>
+            <button class="c-copy" data-copy data-i18n="copy.btn">Copiar</button>
+          </div>
+          <p style="text-align:center;color:var(--muted);font-size:.9rem" class="reveal" data-i18n="install.nuevo.hint">¿Primera vez con Termux? Instala la app desde <a href="https://f-droid.org/packages/com.termux/" rel="noopener">F-Droid</a> (no Google Play).</p>
+        </div>
+
+        <div class="tab-pane" id="pane-experto">
+          <div class="term-code reveal">
+            <pre><code><span class="cmd">git clone</span> https://github.com/sebastianl1/phistack.git
+<span class="cmd">cd</span> phistack
+<span class="cmd">bash</span> install.sh</code></pre>
+            <button class="c-copy" data-copy data-i18n="copy.btn">Copiar</button>
+          </div>
+          <p style="text-align:center;color:var(--muted);font-size:.9rem" class="reveal" data-i18n="install.experto.hint">El instalador instala dependencias, crea el comando <code>phi</code> y valida el entorno.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Uso -->
+    <section id="uso">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="sec-eyebrow" data-i18n="uso.eyebrow">Uso</div>
+          <h2 data-i18n="uso.title">Empieza a usar PhiStack</h2>
+          <p data-i18n="uso.sub">Comandos principales para gestionar tu arsenal desde el terminal.</p>
+        </div>
+
+        <div class="term-code reveal" style="max-width:640px;margin:0 auto">
+          <pre><code><span class="cmd">phi</span>              <span class="cm" data-i18n="uso.c1"># Menú interactivo</span>
+<span class="cmd">phi list</span>         <span class="cm" data-i18n="uso.c2"># Listar herramientas</span>
+<span class="cmd">phi install nmap</span> <span class="cm" data-i18n="uso.c3"># Instalar una herramienta</span>
+<span class="cmd">phi remove hydra -y</span> <span class="cm" data-i18n="uso.c4"># Eliminar (sin confirmar)</span>
+<span class="cmd">phi doctor</span>      <span class="cm" data-i18n="uso.c5"># Diagnosticar el sistema</span>
+<span class="cmd">phi theme</span>       <span class="cm" data-i18n="uso.c6"># Cambiar banner / prompt</span></code></pre>
+          <button class="c-copy" data-copy data-i18n="copy.btn">Copiar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catálogo -->
+    <section id="catalogo" class="alt">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="sec-eyebrow" data-i18n="catalogo.eyebrow">Catálogo</div>
+          <h2 data-i18n="catalogo.title">72 herramientas analizadas</h2>
+          <p data-i18n="catalogo.sub">OSINT, escaneo, web, explotación, contraseñas, phishing, red, forense y utilidades. Marca obsoletas y sugiere reemplazos.</p>
+        </div>
+        <div class="cat-chips reveal">
+          <span class="chip osint">OSINT</span>
+          <span class="chip scan">Scan</span>
+          <span class="chip web">Web</span>
+          <span class="chip exploit">Exploit</span>
+          <span class="chip crack">Crack</span>
+          <span class="chip phishing">Phishing</span>
+          <span class="chip scan">Wireless</span>
+          <span class="chip web">Forense</span>
+          <span class="chip osint">Utils</span>
+        </div>
+        <p class="cat-note reveal"><span data-i18n="catalogo.docs">Informe completo de obsolescencia y mejoras.</span> <a href="ANALISIS_TOOLS.md" rel="noopener" data-i18n="catalogo.link">Ver el informe</a></p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="sec-eyebrow" data-i18n="faq.eyebrow">FAQ</div>
+          <h2 data-i18n="faq.title">Preguntas frecuentes</h2>
+          <p data-i18n="faq.sub">Resolvemos las dudas más comunes sobre PhiStack.</p>
+        </div>
+        <div class="faq">
+          <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq1.q">¿Qué es PhiStack?</span><span class="chev">▼</span></button><div class="faq-a"><p data-i18n="faq1.a">PhiStack es un gestor de stack para Termux: instala, elimina y analiza herramientas de ciberseguridad desde un catálogo declarativo con menús interactivos.</p></div></div>
+          <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq2.q">¿Necesito root o proot?</span><span class="chev">▼</span></button><div class="faq-a"><p data-i18n="faq2.a">No. PhiStack usa los repositorios de Termux (<code>pkg</code>), Python, git y binarios de proyectos open source. Nada de root.</p></div></div>
+          <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq3.q">¿Por qué debo instalar Termux desde F-Droid?</span><span class="chev">▼</span></button><div class="faq-a"><p data-i18n="faq3.a">La versión de Google Play está desactualizada y abandonada. La oficial se mantiene en <a href="https://f-droid.org/packages/com.termux/" rel="noopener">F-Droid</a>.</p></div></div>
+          <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq4.q">¿Cómo añado mi propio stack?</span><span class="chev">▼</span></button><div class="faq-a"><p data-i18n="faq4.a">Añade una entrada en <code>catalog/tools.json</code> (id, categoría, estado, pasos de instalación y verificación). El catálogo valida tu entrada automáticamente.</p></div></div>
+          <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq5.q">¿Qué significa el estado de una herramienta?</span><span class="chev">▼</span></button><div class="faq-a"><p data-i18n="faq5.a">Activa (mantenida), legacy (funcional sin mantenimiento), obsoleta (archivada, con reemplazo sugerido), API (requiere key) o local.</p></div></div>
+          <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq6.q">¿Cómo actualizo PhiStack?</span><span class="chev">▼</span></button><div class="faq-a"><p data-i18n="faq6.a">Ejecuta <code>phi update</code> (hace <code>git pull</code> y refresca dependencias) o <code>bash update.sh</code>.</p></div></div>
+          <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq7.q">¿Cómo desinstalo PhiStack?</span><span class="chev">▼</span></button><div class="faq-a"><p data-i18n="faq7.a">Ejecuta <code>phi uninstall</code> (borra binarios y configuración) o <code>bash uninstall.sh</code>.</p></div></div>
+          <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq8.q">¿Por qué Python?</span><span class="chev">▼</span></button><div class="faq-a"><p data-i18n="faq8.a">Catálogo JSON + InquirerPy (menús profesionales) + rich (tablas y estados). 100% compatible con Termux.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <h4 data-i18n="footer.about_h">PhiStack · Termux</h4>
+          <p style="color:var(--muted);font-size:.88rem" data-i18n="footer.about_d">Gestor de stack para Termux: catálogo declarativo, menús interactivos y análisis de obsolescencia para tu arsenal de seguridad.</p>
+        </div>
+        <div>
+          <h4 data-i18n="footer.res_h">Recursos</h4>
+          <ul>
+            <li><a href="#instalacion" data-i18n="footer.res.install">Instalación</a></li>
+            <li><a href="#uso" data-i18n="footer.res.commands">Comandos</a></li>
+            <li><a href="#catalogo" data-i18n="footer.res.catalog">Catálogo</a></li>
+            <li><a href="#faq" data-i18n="footer.res.faq">FAQ</a></li>
+            <li><a href="https://github.com/sebastianl1/phistack/blob/main/README.md" rel="noopener" data-i18n="footer.res.readme">README</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footer.links_h">Enlaces</h4>
+          <ul>
+            <li><a href="https://github.com/sebastianl1/phistack" rel="noopener" data-i18n="footer.links.repo">Repositorio</a></li>
+            <li><a href="https://sebastianl1.github.io/Portafolio/" rel="noopener" data-i18n="footer.links.portfolio">Portafolio del autor</a></li>
+            <li><a href="https://github.com/sebastianl1/osintphi" rel="noopener" data-i18n="footer.links.osintphi">OsintPhi</a></li>
+            <li><a href="https://github.com/sebastianl1/torphi" rel="noopener" data-i18n="footer.links.torphi">TorPhi</a></li>
+            <li><a href="https://github.com/sebastianl1/lamdaphi" rel="noopener" data-i18n="footer.links.lamdaphi">Lamdaphi</a></li>
+            <li><a href="https://f-droid.org/packages/com.termux/" rel="noopener" data-i18n="footer.links.termux">Termux en F-Droid</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footer.cred_h">Créditos</h4>
+          <ul>
+            <li><a href="https://sebastianl1.github.io/Portafolio/" rel="noopener">Sebastian Laguna</a> <span data-i18n="footer.cred.author">— Autor</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span data-i18n="footer.bottom">© 2026 PhiStack — Licencia MIT</span>
+        <span data-i18n="footer.love">Hecho con ♥ para la comunidad Termux</span>
+      </div>
+      <div class="foot-tags" data-i18n="footer.tags">
+        phistack termux · gestor de stack · herramientas de seguridad termux · osintphi · torphi · lamdaphi · arsenal termux
+      </div>
+    </div>
+  </footer>
+
+  <script defer>
+    var t = function (k) { return (window.I18N && window.I18N[k] != null) ? window.I18N[k] : (window.I18N_ES ? window.I18N_ES[k] : '') || ''; };
+
+    (function () {
+      // Copy buttons
+      document.querySelectorAll('.c-copy').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var pre = btn.parentElement.querySelector('pre');
+          var text = pre ? pre.innerText : '';
+          function done() {
+            btn.textContent = t('copied');
+            btn.classList.add('ok');
+            setTimeout(function () { btn.textContent = t('copy.btn'); btn.classList.remove('ok'); }, 1600);
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(done);
+          } else {
+            var ta = document.createElement('textarea');
+            ta.value = text; document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta); done();
+          }
+        });
+      });
+
+      // FAQ accordion
+      document.querySelectorAll('.faq-q').forEach(function (q) {
+        q.addEventListener('click', function () {
+          var item = q.parentElement;
+          var answer = item.querySelector('.faq-a');
+          var isOpen = item.classList.contains('open');
+          document.querySelectorAll('.faq-item.open').forEach(function (it) {
+            it.classList.remove('open');
+            it.querySelector('.faq-a').style.maxHeight = null;
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+          }
+        });
+      });
+
+      // Tabs
+      document.querySelectorAll('.tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          document.querySelectorAll('.tab').forEach(function (tt) { tt.classList.remove('active'); });
+          document.querySelectorAll('.tab-pane').forEach(function (p) { p.classList.remove('active'); });
+          tab.classList.add('active');
+          document.getElementById('pane-' + tab.dataset.tab).classList.add('active');
+        });
+      });
+
+      // Reveal on scroll
+      var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.12 }) : null;
+      document.querySelectorAll('.reveal').forEach(function (el) {
+        if (io) io.observe(el); else el.classList.add('in');
+      });
+
+      // ── i18n ──
+      var SUPPORTED = ['es', 'en', 'pt', 'fr', 'de', 'zh'];
+      var STORE_KEY = 'phistack-lang';
+      var NAMES = { es: 'Español', en: 'English', pt: 'Português', fr: 'Français', de: 'Deutsch', zh: '中文' };
+      var dict = null;
+      var current = 'es';
+
+      function getInitial() {
+        var p = new URLSearchParams(location.search).get('lang');
+        if (p && SUPPORTED.indexOf(p) !== -1) return p;
+        try {
+          var s = localStorage.getItem(STORE_KEY);
+          if (s && SUPPORTED.indexOf(s) !== -1) return s;
+        } catch (e) {}
+        var nav = (navigator.language || 'es').slice(0, 2).toLowerCase();
+        return SUPPORTED.indexOf(nav) !== -1 ? nav : 'es';
+      }
+
+      function setMeta() {
+        if (!dict || !dict.meta) return;
+        if (dict.meta.title) {
+          document.title = dict.meta.title;
+          var ogT = document.querySelector('meta[property="og:title"]');
+          if (ogT) ogT.content = dict.meta.title;
+          var twT = document.querySelector('meta[name="twitter:title"]');
+          if (twT) twT.content = dict.meta.title;
+        }
+        if (dict.meta.description) {
+          var d = document.querySelector('meta[name="description"]');
+          if (d) d.content = dict.meta.description;
+          var ogD = document.querySelector('meta[property="og:description"]');
+          if (ogD) ogD.content = dict.meta.description;
+          var twD = document.querySelector('meta[name="twitter:description"]');
+          if (twD) twD.content = dict.meta.description;
+        }
+        if (dict.meta.keywords) {
+          var kw = document.querySelector('meta[name="keywords"]');
+          if (kw) kw.content = dict.meta.keywords;
+        }
+      }
+
+      function apply() {
+        document.documentElement.lang = current;
+        setMeta();
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          var k = el.getAttribute('data-i18n');
+          if (dict && dict[k] != null) el.innerHTML = dict[k];
+        });
+        var label = document.getElementById('langLabel');
+        if (label) label.textContent = NAMES[current] || NAMES.es;
+        var menu = document.getElementById('langMenu');
+        if (menu) {
+          menu.querySelectorAll('a[data-lang]').forEach(function (a) {
+            a.setAttribute('aria-selected', a.dataset.lang === current ? 'true' : 'false');
+          });
+        }
+      }
+
+      function loadLang(lang, cb) {
+        var s = document.createElement('script');
+        s.src = 'lang/' + lang + '.js';
+        s.onload = function () { dict = window.I18N || null; cb && cb(); };
+        s.onerror = function () { dict = null; cb && cb(); };
+        document.head.appendChild(s);
+      }
+
+      current = getInitial();
+      loadLang(current, function () {
+        if (!dict && current !== 'es') {
+          current = 'es';
+          loadLang('es', function () { apply(); });
+          return;
+        }
+        apply();
+        try { localStorage.setItem(STORE_KEY, current); } catch (e) {}
+        var url = new URL(location.href);
+        url.searchParams.set('lang', current);
+        history.replaceState(null, '', url);
+      });
+
+      // ── Selector de idioma (dropdown custom) ──
+      var langWrap = document.getElementById('langWrap');
+      var langBtn = document.getElementById('langBtn');
+      var langMenu = document.getElementById('langMenu');
+
+      function closeLang() {
+        langWrap.classList.remove('open');
+        langMenu.classList.remove('open');
+        langBtn.setAttribute('aria-expanded', 'false');
+      }
+
+      if (langBtn && langMenu) {
+        langBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = langWrap.classList.toggle('open');
+          langMenu.classList.toggle('open', open);
+          langBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.addEventListener('click', function (e) {
+          if (!langWrap.contains(e.target)) closeLang();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeLang();
+        });
+        langMenu.addEventListener('click', function (e) {
+          var a = e.target.closest ? e.target.closest('a[data-lang]') : null;
+          if (a) {
+            e.preventDefault();
+            var lang = a.dataset.lang;
+            closeLang();
+            if (lang && lang !== current) {
+              var url = new URL(location.href);
+              url.searchParams.set('lang', lang);
+              location.href = url.toString();
+            }
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

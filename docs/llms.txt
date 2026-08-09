@@ -1,0 +1,62 @@
+# PhiStack para Termux
+
+> Gestor de stack para Termux (bilingüe ES/EN). Catálogo declarativo de 72
+> herramientas de ciberseguridad con menús interactivos (InquirerPy) y análisis
+> de obsolescencia. Uso autorizado únicamente.
+
+## Instalación
+
+- [README (instalación y comandos)](https://github.com/sebastianl1/phistack#readme)
+- [Landing page](https://sebastianl1.github.io/phistack/): características, instalación, FAQ en 6 idiomas
+- [Informe de obsolescencia](https://sebastianl1.github.io/phistack/ANALISIS_TOOLS.md): herramientas activas / legacy / obsoletas
+
+Instalación rápida en Termux:
+
+```
+pkg update && pkg upgrade -y
+pkg install git -y
+git clone https://github.com/sebastianl1/phistack.git
+cd phistack
+bash install.sh
+```
+
+## Uso
+
+- `phi` — menú interactivo
+- `phi list [categoria]` — listar herramientas
+- `phi install <tool>` — instalar
+- `phi remove <tool> [-y]` — eliminar
+- `phi info <tool>` — información y reemplazo sugerido
+- `phi doctor` — diagnóstico del entorno
+- `phi theme` — banner / prompt
+- `phi lang <es|en>` — idioma
+- `phi update` / `phi uninstall`
+
+## Catálogo
+
+Fuente de verdad: `catalog/tools.json` (72 herramientas, 9 categorías).
+
+- OSINT: sherlock, theHarvester, holehe, h8mail, phoneinfoga, subfinder, instaloader…
+- Escaneo: nmap (+vulscan), gobuster, ffuf, nikto, whatweb, httpx, nuclei…
+- Web: sqlmap, xsstrike, photon, beef-xss…
+- Explotación: metasploit…
+- Contraseñas: hydra, john, crunch, cupp…
+- Phishing: zphisher, seeker, gophish…
+- Forense: exiftool, metagoofil, apktool…
+- Utilidades: tmate, speedtest, shodan (API), virustotal (API)…
+
+Estados: active (mantenida) / legacy (funcional sin mantenimiento) / obsolete
+(archivada, con reemplazo sugerido) / api (requiere key) / local.
+
+## Seguridad
+
+- Uso autorizado únicamente. No pruebes sistemas ajenos sin permiso explícito.
+- Descargas directas con soporte de SHA256. Sin `curl | bash` ciego.
+- `phi doctor` valida el entorno antes de instalar.
+
+## Enlaces
+
+- Repositorio: https://github.com/sebastianl1/phistack
+- Landing: https://sebastianl1.github.io/phistack/
+- Familia Phi: OsintPhi, TorPhi, Lamdaphi
+- Licencia: MIT

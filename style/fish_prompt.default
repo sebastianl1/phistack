@@ -1,0 +1,13 @@
+function fish_prompt
+    set -l last_status $status
+    set -l normal (set_color normal)
+    set -l green (set_color -o green)
+    set -l red (set_color -o red)
+    set -l blue (set_color -o blue)
+
+    if test $last_status -eq 0
+        echo -n -s $blue (pwd | sed "s|^$HOME|~|") " " $green "❯ " $normal
+    else
+        echo -n -s $blue (pwd | sed "s|^$HOME|~|") " " $red "❯ " $normal
+    end
+end
