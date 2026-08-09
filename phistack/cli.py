@@ -55,6 +55,25 @@ def cmd_list(args):
         for tool in tools:
             cmd_info(types.SimpleNamespace(tool=tool["id"]))
         return
+    plain = getattr(args, "plain", False)
+    if not plain and _is_tty():
+        category = args.category if args.category and args.category != "*" else None
+        if category is None:
+            sel = _select_category()
+            if sel == "search":
+                query = menus.text(t("search_query"))
+                results = catalog.search_tools(query)
+                if results:
+                    _browse_tools(results)
+                return
+            category = None if sel == "*" else sel
+            tools = catalog.list_tools(category=category, status=args.status)
+            if args.installed:
+                tools = [x for x in tools if state.is_installed(x["id"]) or installer.installed_by_verify(x)]
+            if args.source:
+                tools = [x for x in tools if x.get("source") == args.source]
+        _browse_tools(tools)
+        return
     _print_names(tools, group=args.group)
     console.print(f"[dim]{t('list.tools_count', n=len(tools), c=len({x.get('category') for x in tools}))}[/]")
 
@@ -63,6 +82,9 @@ def cmd_search(args):
     results = catalog.search_tools(args.query)
     if not results:
         console.print(f"[yellow]{t('no_results', q=args.query)}[/]")
+        return
+    if _is_tty():
+        _browse_tools(results)
         return
     _print_names(results)
     console.print(f"[dim]{t('list.tools_count', n=len(results), c=len({x.get('category') for x in results}))}[/]")
@@ -89,22 +111,6 @@ def _tool_panel(tool):
     console.print(f"[yellow]{t('warn_authorized')}[/]")
 
 
-def _tool_action(tool):
-    _tool_panel(tool)
-    action = menus.select(
-        t("select_tool"),
-        [
-            menus.Choice(value="install", name=f"⬇️  {t('install_cmd')}"),
-            menus.Choice(value="remove", name=f"🗑️  {t('remove_cmd')}"),
-            menus.Choice(value="back", name=t("back")),
-        ],
-    )
-    if action == "install":
-        cmd_install(types.SimpleNamespace(tools=[tool["id"]], interactive=False))
-    elif action == "remove":
-        cmd_remove(types.SimpleNamespace(tools=[tool["id"]], interactive=False, yes=False))
-
-
 def cmd_info(args):
     tool = catalog.get_tool(args.tool)
     if not tool:
@@ -114,7 +120,13 @@ def cmd_info(args):
 
 
 def cmd_install(args):
-    tools = _resolve(args.tools, interactive=args.interactive)
+    if getattr(args, "interactive", False) or not args.tools:
+        if not args.tools and not _is_tty():
+            console.print("[yellow]phi install <tool> [tool...][/]")
+            return
+        _install_multi()
+        return
+    tools = _resolve(args.tools, interactive=False)
     for tool in tools:
         if not tool:
             continue
@@ -275,7 +287,7 @@ def _pick_tool(tools, message_key="select_tool"):
     choices = [
         menus.Choice(
             value=tool["id"],
-            name=f"{STATUS_ICON.get(tool.get('status'), '●')} {tool.get('name', tool['id'])}  ({tool['id']}){_installed_mark(tool)}",
+            name=_tool_choice_name(tool),
         )
         for tool in tools
     ]
@@ -284,6 +296,79 @@ def _pick_tool(tools, message_key="select_tool"):
     else:
         choice = menus.select(t(message_key), choices)
     return next((x for x in tools if x["id"] == choice), None)
+
+
+def _tool_choice_name(tool):
+    mark = " ✓" if _installed_mark(tool) else ""
+    return f"{tool.get('name', tool['id'])} ({tool['id']}){mark}"
+
+
+def _is_tty():
+    try:
+        return sys.stdin.isatty() and sys.stdout.isatty()
+    except (AttributeError, ValueError):
+        return False
+
+
+def _select_category(allow_search=True):
+    from collections import Counter
+
+    tools = catalog.list_tools()
+    counts = Counter(x.get("category") for x in tools)
+    choices = [
+        menus.Choice(value="*", name=f"{t('all_categories')} ({len(tools)})")
+    ]
+    choices += [
+        menus.Choice(value=c, name=f"{category_name(c)} · {counts.get(c, 0)}")
+        for c in catalog.category_ids()
+    ]
+    if allow_search:
+        choices.append(menus.Choice(value="search", name=f"🔍 {t('search_tools')}"))
+    return menus.select(t("select_category"), choices)
+
+
+def _browse_tools(tools):
+    while True:
+        picked = _pick_tool(tools)
+        if not picked:
+            break
+        _tool_panel(picked)
+        action = menus.select(
+            t("select_tool"),
+            [
+                menus.Choice(value="install", name=f"⬇️  {t('install_cmd')}"),
+                menus.Choice(value="remove", name=f"🗑️  {t('remove_cmd')}"),
+                menus.Choice(value="list", name=f"🔁 {t('select_other')}"),
+                menus.Choice(value="back", name=t("back")),
+            ],
+        )
+        if action == "install":
+            cmd_install(types.SimpleNamespace(tools=[picked["id"]], interactive=False))
+        elif action == "remove":
+            cmd_remove(types.SimpleNamespace(tools=[picked["id"]], interactive=False, yes=False))
+        elif action == "list":
+            continue
+        else:
+            break
+
+
+def _install_multi():
+    cat = _select_category(allow_search=False)
+    tools = catalog.list_tools(category=None if cat == "*" else cat)
+    if not tools:
+        console.print(f"[yellow]{t('no_results', q='')}[/]")
+        return
+    choices = [
+        menus.Choice(value=tool["id"], name=_tool_choice_name(tool))
+        for tool in tools
+    ]
+    selected = menus.checkbox(t("select_tools"), choices)
+    if not selected:
+        return
+    for tool_id in selected:
+        tool = catalog.get_tool(tool_id)
+        if tool:
+            cmd_install(types.SimpleNamespace(tools=[tool_id], interactive=False))
 
 
 # ---------------- Laboratorio: Terminal ----------------
@@ -434,7 +519,7 @@ def interactive():
         elif choice == "tools":
             _interactive_tools()
         elif choice == "list":
-            cmd_list(types.SimpleNamespace(category="*", status=None, installed=False, source=None, detail=False, group=False))
+            cmd_list(types.SimpleNamespace(category="*", status=None, installed=False, source=None, detail=False, group=False, plain=False))
         elif choice == "search":
             query = menus.text(t("search_query"))
             cmd_search(types.SimpleNamespace(query=query))
@@ -459,15 +544,15 @@ def _interactive_tools():
             ],
         )
         if choice == "explore":
-            cat = menus.select(
-                t("select_category"),
-                [menus.Choice(value="*", name=t("all_categories"))]
-                + [menus.Choice(value=c, name=category_name(c)) for c in catalog.category_ids()],
-            )
-            tools = catalog.list_tools(category=cat if cat != "*" else None)
-            picked = _pick_tool(tools)
-            if picked:
-                _tool_action(picked)
+            sel = _select_category()
+            if sel == "search":
+                query = menus.text(t("search_query"))
+                results = catalog.search_tools(query)
+                if results:
+                    _browse_tools(results)
+                continue
+            tools = catalog.list_tools(category=None if sel == "*" else sel)
+            _browse_tools(tools)
         elif choice == "remove":
             tools = [
                 x
@@ -558,6 +643,7 @@ def main():
     p_list.add_argument("--installed", action="store_true")
     p_list.add_argument("--source", default=None, choices=["vendor", "pkg", "pip", "download"])
     p_list.add_argument("--group", action="store_true", help="Agrupar por categoría / Group by category")
+    p_list.add_argument("--plain", action="store_true", help="Solo nombres (scripts) / Names only (scripts)")
     p_list.add_argument("--detail", action="store_true")
     p_list.set_defaults(func=cmd_list)
 

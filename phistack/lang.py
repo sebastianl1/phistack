@@ -188,6 +188,15 @@ STRINGS = {
         "es": "{n} herramientas · {c} categorías",
         "en": "{n} tools · {c} categories",
     },
+    "select_other": {"es": "Ver otra herramienta", "en": "See another tool"},
+    "browse.category": {
+        "es": "Selecciona una categoría",
+        "en": "Select a category",
+    },
+    "browse.action": {
+        "es": "Acción sobre la herramienta",
+        "en": "Tool action",
+    },
 }
 
 CATEGORIES = {

@@ -2,6 +2,16 @@
 
 Todas las notas de versiones de PhiStack. Sigue [Keep a Changelog](https://keepachangelog.com/) y [SemVer](https://semver.org/).
 
+## [2.0.3] - 2026-08-09
+
+### Added
+- **Navegador interactivo de herramientas** (`phi list` en TTY, estilo InquirerPy): selector de categorías con **conteos** (`Todas las categorías (41)`, `OSINT · 11`…) → lista de herramientas (select/fuzzy) → **panel de descripción** con acciones `Instalar / Eliminar / Ver otra / Volver`.
+- **Multi-instalación con checkbox**: `phi install` sin argumentos (TTY) elige categoría → marca varias herramientas → instala todas.
+- `phi search` abre el navegador en TTY (panel por herramienta).
+
+### Changed
+- `phi list --plain` y **sin TTY** conservan la salida de solo nombres (compatible con scripts).
+
 ## [2.0.2] - 2026-08-09
 
 ### Removed

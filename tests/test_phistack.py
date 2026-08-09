@@ -117,6 +117,19 @@ def test_cli_list():
     assert "nmap" in proc.stdout.lower()
 
 
+def test_cli_list_plain_names_only():
+    proc = subprocess.run(
+        [sys.executable, "phi.py", "list", "--plain"],
+        capture_output=True,
+        text=True,
+        cwd=str(paths.REPO_ROOT),
+    )
+    assert proc.returncode == 0
+    assert "Sherlock" in proc.stdout
+    assert "Categoría" not in proc.stdout
+    assert "Fuente" not in proc.stdout
+
+
 def test_cli_info_unknown_tool():
     proc = subprocess.run(
         [sys.executable, "phi.py", "info", "no-existe"],
