@@ -22,3 +22,4 @@ chmod 755 "${PREFIX}/bin/phi"
 chmod 755 "${SCRIPT_DIR}/phi.py"
 
 echo -e "\033[1;32m[✓]\033[0m PhiStack instalado. Ejecuta: \033[1;37mphi\033[0m"
+echo -e "\033[1;36m[🌐]\033[0m Página web: \033[1;37mhttps://sebastianl1.github.io/phistack/\033[0m"

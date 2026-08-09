@@ -2,6 +2,14 @@
 
 **Laboratorio Termux** — estructura tu terminal de Android para desarrollo de software y ciberseguridad, con un catálogo curado y funcional de herramientas, presets de terminal e IDE. Bilingüe ES/EN.
 
+[![Página web](https://img.shields.io/badge/%F0%9F%8C%90%20P%C3%A1gina%20web-%E2%9E%A4%20sebastianl1.github.io%2Fphistack-red?style=flat-square)](https://sebastianl1.github.io/phistack/)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Termux](https://img.shields.io/badge/Termux-Android-green?style=flat-square)](https://f-droid.org/packages/com.termux/)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![Menús](https://img.shields.io/badge/men%C3%BAs-InquirerPy-22d3ee?style=flat-square)](https://github.com/kazhala/InquirerPy)
+
+> 🌐 **Página web / Website:** <https://sebastianl1.github.io/phistack/> — landing en 6 idiomas con el catálogo completo, SEO y FAQ.
+
 > Uso autorizado únicamente. Muchas herramientas son para pruebas de seguridad.
 > No pruebes sistemas que no te pertenecen o sin permiso explícito.
 
